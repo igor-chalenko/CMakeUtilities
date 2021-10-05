@@ -1,41 +1,26 @@
-Doxypress module for CMake
-==========================
+CMake utilities
+===============
 
-This is a CMake package that makes it easy to set up API documentation
-generation via Doxypress_.
+This is a CMake_ package that provides functionality of general interest, such as logging, test assertions,
+and key to value mapping.
 
-.. _Doxypress: https://www.copperspice.com/docs/doxypress/index.html
+.. _CMake: https://cmake.org/
 
 .. toctree::
    :maxdepth: 2
-   :caption: Basics
+   :caption: What's inside
 
-   intro
+   GlobalMap
+   Logging
+   PrefixFunctions
+   Testing
 
 .. toctree::
    :maxdepth: 1
-   :caption: Public API
-
-   FindDoxypress
-   DoxypressCMake
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Implementation
-
-   components
-   description
-
-.. toctree::
-   :maxdepth: 2
    :caption: Additional info
 
-   glossary
-   platforms
-   faq
    changelog
    license
-
 
 Indices and tables
 ==================

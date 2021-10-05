@@ -1,106 +1,63 @@
 ##############################################################################
 # Copyright (c) 2020 Igor Chalenko
 # Distributed under the MIT license.
-# See accompanying file LICENSE.md or copy at
+# See accompanying file LICENSE.md.md or copy at
 # https://opensource.org/licenses/MIT
 ##############################################################################
 
 ##############################################################################
 #.rst:
-# Target Property Accessors (TPA)
-# -------------------------------
-#
-# Functions with prefix ``TPA`` manage state of a surrogate `INTERFACE` target:
-# properties of this target are used as a global cache for stateful data.
-# This surrogate target is called :ref:`TPA scope` throughout this
-# documentation. It's possible to set, unset, or append to a target property
-# using syntax similar to that of usual variables:
+# .. cmake:command:: global_set
 #
 # .. code-block:: cmake
 #
-#   # set(variable value)
-#   global_map_set(variable value)
-#   # unset(variable)
-#   global_map_unset(variable)
-#   # list(APPEND variable value)
-#   global_map_append(variable value)
+#    global_set(_prefix _property _value)
 #
-# ---------
-# TPA scope
-# ---------
-#
-# A TPA scope is a dictionary of some target's properties. Therefore, it is
-# a named global scope with a lifetime of the underlying target. Variables never
-# go out of scope in `TPA` and must be deleted explicitly (if needed). `CMake`
-# doesn't allow arbitrary property names; therefore, input property names are
-# prefixed with ``INTERFACE_`` to obtain the actual property name in that
-# `INTERFACE` target. Each TPA scope maintains the index of properties
-# it contains; this makes it easy to clear up a scope entirely and re-use it
-# afterward. There can be only one TPA scope in a project, as its name uses
-# the value of  ``CMAKE_PROJECT_NAME`` as prefix.
+# Stores the [``_property``, ``_value``] pair in the global map ``_prefix``.
 ##############################################################################
-#.rst:
-# -------------
-# TPA functions
-# -------------
-##############################################################################
-
-#set(_DOXYPRESS_global_map_index_KEY property.index CACHE STRING "index of properties")
-#mark_as_advanced(_DOXYPRESS_global_map_index_KEY)
-
-##############################################################################
-#.rst:
-# .. cmake:command:: global_map_set
-#
-# .. code-block:: cmake
-#
-#    global_map_set(_name _value)
-#
-# Sets the property with the ``_name`` to a new value of ``_value``.
-##############################################################################
-function(global_set _prefix _name _value)
+function(global_set _prefix _property _value)
     global_index(${_prefix} _index)
-    list(FIND _index "${_prefix}${_name}" _ind)
-    set_property(GLOBAL PROPERTY "${_prefix}${_name}" ${_value})
+    list(FIND _index "${_prefix}${_property}" _ind)
+    set_property(GLOBAL PROPERTY "${_prefix}${_property}" ${_value})
     if (_ind EQUAL -1)
-        list(APPEND _index "${_prefix}${_name}")
+        list(APPEND _index "${_prefix}${_property}")
         global_set_index(${_prefix} "${_index}")
     endif()
 endfunction()
 
 ##############################################################################
 #.rst:
-# .. cmake:command:: global_map_unset
+# .. cmake:command:: global_unset
 #
 # .. code-block:: cmake
 #
-#    global_map_unset(_name)
+#    global_unset(_prefix _property)
 #
-# Unsets the property with the name ``_name``.
+# Removes the property ``_property`` from the global map ``_prefix``.
 ##############################################################################
-function(global_unset _prefix _name)
+function(global_unset _prefix _property)
     global_index(${_prefix} _index)
-    list(FIND _index "${_prefix}${_name}" _ind)
+    list(FIND _index "${_prefix}${_property}" _ind)
     if (NOT _ind EQUAL -1)
-        set_property(GLOBAL PROPERTY "${_prefix}${_name}")
-        list(REMOVE_ITEM _index "${_prefix}${_name}")
+        set_property(GLOBAL PROPERTY "${_prefix}${_property}")
+        list(REMOVE_ITEM _index "${_prefix}${_property}")
         global_set_index(${_prefix} "${_index}")
     endif()
 endfunction()
 
 ##############################################################################
 #.rst:
-# .. cmake:command:: global_map_get
+# .. cmake:command:: global_get
 #
 # .. code-block:: cmake
 #
-#    global_map_get(_name _out_var)
+#    global_get(_prefix _property _out_var)
 #
-# Stores the value of a property ``_name`` into the parent scope's variable
-# designated by ``_out_var``.
+# Stores the value of the property ``_property`` into the parent scope's
+# variable designated by ``_out_var``.
 ##############################################################################
-function(global_get _prefix _name _out_var)
-    get_property(_value GLOBAL PROPERTY ${_prefix}${_name})
+function(global_get _prefix _property _out_var)
+    get_property(_value GLOBAL PROPERTY ${_prefix}${_property})
     if ("${_value}" STREQUAL "_value-NOTFOUND")
         set(${_out_var} "" PARENT_SCOPE)
     else ()
@@ -108,37 +65,50 @@ function(global_get _prefix _name _out_var)
     endif ()
 endfunction()
 
-function(global_get_or_fail _prefix _name _out_var)
-    global_get(${_prefix} ${_name} _value)
-    if (NOT _value STREQUAL "")
-        set(${_out_var} "${_value}" PARENT_SCOPE)
-    else()
-        message(FATAL_ERROR "Variable ${_name} not found in the global map `${_prefix}`.")
-    endif()
-endfunction()
 ##############################################################################
 #.rst:
-# .. cmake:command:: global_map_append
+# .. cmake:command:: global_get_or_fail
 #
 # .. code-block:: cmake
 #
-#    global_map_append(_name _value)
+#    global_get_or_fail(_prefix _property _out_var)
 #
-# If the property `_name` exists, it is treated as a list, and the value of
-# ``_value`` is appended to it. Otherwise, the property ``_name`` is created and
-# set to the given value.
+# Stores the value of the property ``_property`` into the parent scope's
+# variable designated by ``_out_var``.
 ##############################################################################
-function(global_append _prefix _name _value)
-    global_index(${_prefix} _index)
-    #list(FIND _index ${_name} _ind)
+function(global_get_or_fail _prefix _property _out_var)
+    global_get(${_prefix} ${_property} _value)
+    if (NOT _value STREQUAL "")
+        set(${_out_var} "${_value}" PARENT_SCOPE)
+    else()
+        message(FATAL_ERROR "The key `${_property}` is not in the global map
+        `${_prefix}`.")
+    endif()
+endfunction()
 
-    # list(APPEND ${_name} ${_values})
-    global_get(${_prefix} ${_name} _current_value)
+##############################################################################
+#.rst:
+# .. cmake:command:: global_append
+#
+# .. code-block:: cmake
+#
+#    global_append(_prefix _property _value)
+#
+# If the property ``_property`` exists, it is treated as a list, and
+# the value of ``_value`` is appended to it. Otherwise, the property
+# ``_property`` is created and set to the given value.
+##############################################################################
+function(global_append _prefix _property _value)
+    global_index(${_prefix} _index)
+    #list(FIND _index ${_property} _ind)
+
+    # list(APPEND ${_property} ${_values})
+    global_get(${_prefix} ${_property} _current_value)
     if ("${_current_value}" STREQUAL "")
-        global_set(${_prefix} ${_name} "${_value}")
+        global_set(${_prefix} ${_property} "${_value}")
     else()
         list(APPEND _current_value "${_value}")
-        global_set(${_prefix} ${_name} "${_current_value}")
+        global_set(${_prefix} ${_property} "${_current_value}")
     endif()
 endfunction()
 
@@ -155,8 +125,8 @@ endfunction()
 ##############################################################################
 function(global_clear _prefix)
     global_index(${_prefix} _index)
-    foreach(_name ${_index})
-        set_property(GLOBAL PROPERTY "${_name}")
+    foreach(_property ${_index})
+        set_property(GLOBAL PROPERTY "${_property}")
     endforeach()
     set_property(GLOBAL PROPERTY ${_prefix}property.index)
 endfunction()
