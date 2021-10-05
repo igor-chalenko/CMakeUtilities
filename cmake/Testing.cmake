@@ -17,6 +17,12 @@ macro(assert_not_empty _value)
     endif()
 endmacro()
 
+macro(assert_empty _value)
+    if (NOT "${_value}" STREQUAL "")
+        log_fatal("Expected empty variable.")
+    endif()
+endmacro()
+
 macro(assert_same str1 str2)
     if (NOT "${str1}" STREQUAL "${str2}")
         message(SEND_ERROR "`${str1}` is not the same as `${str2}`")

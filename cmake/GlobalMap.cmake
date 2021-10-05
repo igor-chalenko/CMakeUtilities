@@ -79,12 +79,12 @@ endfunction()
 # Unsets the property with the name ``_name``.
 ##############################################################################
 function(global_unset _prefix _name)
-    global_map_index(${_prefix} _index)
+    global_index(${_prefix} _index)
     list(FIND _index "${_prefix}${_name}" _ind)
     if (NOT _ind EQUAL -1)
         set_property(GLOBAL PROPERTY "${_prefix}${_name}")
         list(REMOVE_ITEM _index "${_prefix}${_name}")
-        global_set_index("${_index}")
+        global_set_index(${_prefix} "${_index}")
     endif()
 endfunction()
 
