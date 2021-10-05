@@ -64,7 +64,7 @@ function(global_set _prefix _name _value)
     set_property(GLOBAL PROPERTY "${_prefix}${_name}" ${_value})
     if (_ind EQUAL -1)
         list(APPEND _index "${_prefix}${_name}")
-        global_map_set_index(${_prefix} "${_index}")
+        global_set_index(${_prefix} "${_index}")
     endif()
 endfunction()
 
@@ -84,7 +84,7 @@ function(global_unset _prefix _name)
     if (NOT _ind EQUAL -1)
         set_property(GLOBAL PROPERTY "${_prefix}${_name}")
         list(REMOVE_ITEM _index "${_prefix}${_name}")
-        global_map_set_index("${_index}")
+        global_set_index("${_index}")
     endif()
 endfunction()
 
@@ -108,6 +108,14 @@ function(global_get _prefix _name _out_var)
     endif ()
 endfunction()
 
+function(global_get_or_fail _prefix _name _out_var)
+    global_get(${_prefix} ${_name} _value)
+    if (NOT _value STREQUAL "")
+        set(${_out_var} "${_value}" PARENT_SCOPE)
+    else()
+        message(FATAL_ERROR "Variable ${_name} not found in the global map `${_prefix}`.")
+    endif()
+endfunction()
 ##############################################################################
 #.rst:
 # .. cmake:command:: global_map_append
@@ -146,7 +154,7 @@ endfunction()
 # ``global_map_append``.
 ##############################################################################
 function(global_clear _prefix)
-    global_map_index(${_prefix} _index)
+    global_index(${_prefix} _index)
     foreach(_name ${_index})
         set_property(GLOBAL PROPERTY "${_name}")
     endforeach()
@@ -171,10 +179,10 @@ endfunction()
 
 ##############################################################################
 #.rst:
-# .. cmake:command:: global_map_set_index
+# .. cmake:command:: global_set_index
 #
 # Replace the current TPA scope's index by the list given by ``_index``.
 ##############################################################################
-function(global_map_set_index _prefix _index)
+function(global_set_index _prefix _index)
     set_property(GLOBAL PROPERTY ${_prefix}property.index "${_index}")
 endfunction()

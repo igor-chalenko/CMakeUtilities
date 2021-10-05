@@ -1,0 +1,14 @@
+@PACKAGE_INIT@
+
+get_filename_component(cmake_utilities_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
+set_and_check(CMAKE_UTILITIES_CMAKE_MODULE_DIR "${cmake_utilities_dir}")
+list(APPEND CMAKE_UTILITIES_CMAKE_MODULE_PATH "${CMAKE_UTILITIES_CMAKE_MODULE_DIR}")
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_UTILITIES_CMAKE_MODULE_PATH}")
+
+# "New" IN_LIST syntax
+cmake_policy(SET CMP0057 NEW)
+
+include(${cmake_utilities_dir}/GlobalMap.cmake)
+include(${cmake_utilities_dir}/Logging.cmake)
+include(${cmake_utilities_dir}/Testing.cmake)
+include(${cmake_utilities_dir}/WrapModule.cmake)
