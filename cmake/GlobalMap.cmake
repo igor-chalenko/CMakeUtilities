@@ -27,6 +27,31 @@ endfunction()
 
 ##############################################################################
 #.rst:
+# .. cmake:command:: global_set_if_empty
+#
+# .. code-block:: cmake
+#
+#    global_set_if_empty(_prefix _property _value)
+#
+# If the global map ``_prefix`` does not contain the key ``_property``,
+# stores the [``_property``, ``_value``] pair in that map. Otherwise,
+# issues a warning without updating the map.
+##############################################################################
+function(global_set_if_empty _prefix _property _value)
+    global_index(${_prefix} _index)
+    list(FIND _index "${_prefix}${_property}" _ind)
+    if (_ind EQUAL -1)
+        set_property(GLOBAL PROPERTY "${_prefix}${_property}" ${_value})
+        list(APPEND _index "${_prefix}${_property}")
+        global_set_index(${_prefix} "${_index}")
+    else()
+        message(WARNING "The property ${_prefix}${_property} already exists,
+                will not update it")
+    endif()
+endfunction()
+
+##############################################################################
+#.rst:
 # .. cmake:command:: global_unset
 #
 # .. code-block:: cmake
@@ -53,8 +78,8 @@ endfunction()
 #
 #    global_get(_prefix _property _out_var)
 #
-# Stores the value of the property ``_property`` into the parent scope's
-# variable designated by ``_out_var``.
+# Stores the value of the property ``_property`` into the output variable
+# designated by ``_out_var``.
 ##############################################################################
 function(global_get _prefix _property _out_var)
     get_property(_value GLOBAL PROPERTY ${_prefix}${_property})
@@ -73,8 +98,9 @@ endfunction()
 #
 #    global_get_or_fail(_prefix _property _out_var)
 #
-# Stores the value of the property ``_property`` into the parent scope's
-# variable designated by ``_out_var``.
+# Searches the property ``_property`` in the given global map ``_prefix``.
+# If found, the output variable ``_out_var`` is updated to store
+# the property's value. Otherwise, fatal error is raised.
 ##############################################################################
 function(global_get_or_fail _prefix _property _out_var)
     global_get(${_prefix} ${_property} _value)
@@ -114,14 +140,14 @@ endfunction()
 
 ##############################################################################
 #.rst:
-# .. cmake:command:: global_map_clear_scope
+# .. cmake:command:: global_clear
 #
 # .. code-block:: cmake
 #
-#    global_map_clear_scope()
+#    global_clear(_prefix)
 #
-# Clears all properties previously set by calls to ``global_map_set`` and
-# ``global_map_append``.
+# Clears all the properties previously set in the global map ``_prefix`` by
+# the calls to ``global_set`` and ``global_append``.
 ##############################################################################
 function(global_clear _prefix)
     global_index(${_prefix} _index)
@@ -133,14 +159,14 @@ endfunction()
 
 ##############################################################################
 #.rst:
-# .. cmake:command:: global_map_index
+# .. cmake:command:: global_index
 #
 # .. code-block:: cmake
 #
-#    global_map_index(_out_var)
+#    global_index(_prefix _out_var)
 #
-# Writes the current scope's index into the variable designated by ``_out_var``
-# in the parent scope.
+# Sets the output variable ``_out_var`` to store the index of the global map
+# ``_prefix``.
 ##############################################################################
 function(global_index _prefix _out_var)
     global_get(${_prefix} property.index _index)
@@ -151,7 +177,11 @@ endfunction()
 #.rst:
 # .. cmake:command:: global_set_index
 #
-# Replace the current TPA scope's index by the list given by ``_index``.
+# .. code-block:: cmake
+#
+#    global_set_index(_prefix _index)
+#
+# Replaces the index of the global map ``_prefix`` by the list ``_index``.
 ##############################################################################
 function(global_set_index _prefix _index)
     set_property(GLOBAL PROPERTY ${_prefix}property.index "${_index}")

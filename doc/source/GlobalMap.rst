@@ -1,18 +1,18 @@
-Global map functions
-====================
+Global maps
+===========
 
-Sometimes, a CMake function can have a complex state. In such cases, writing
-something like
+A global map is a set of [key, value] pairs with the same prefix in their keys.
+In the implementation, these properties are created by the calls to
 
 .. code-block:: cmake
 
-  get_property(value GLOBAL PROPERTY property)
-  set_property(GLOBAL PROPERTY property ${value} ${additional_value})
+  set_property(GLOBAL PROPERTY ${prefix}${key} ${value})
 
-just to append a value to an existing property becomes a tedious,
-error-prone task. This module implements functions that manipulate global
-contexts to make the task of state management easier. It's possible to set,
-unset, or append to a target property using syntax similar to that of usual
+A prefix usually identifies a program context, so that different global maps
+separate different contexts. A global map maintains an index of the keys
+it stores, which can be used to find out whether a property is in the map or
+not. A map can also be cleared with the help of its index. It's possible
+to set, unset, or append to a property using syntax similar to that of usual
 variables:
 
 .. code-block:: cmake
@@ -28,8 +28,25 @@ variables:
 
 The first argument is always a map name; it limits the scope of the operation
 to a certain context. It's convenient to think of this argument as of a map
-name, although in implementation it's just a prefix to the stored property
-names.
+name, although in implementation it's just a prefix of the stored keys.
+
+===========
+When to use
+===========
+Sometimes, a CMake function or a module can have a complex state. In such cases,
+writing something like
+
+.. code-block:: cmake
+
+  get_property(value GLOBAL PROPERTY property)
+  set_property(GLOBAL PROPERTY property ${value} ${additional_value})
+
+just to append a value to an existing property becomes a tedious,
+error-prone task.
+
+=========
+Functions
+=========
 
 .. cmake-module:: ../../cmake/GlobalMap.cmake
 
