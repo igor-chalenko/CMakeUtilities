@@ -12,14 +12,14 @@ function(test_log_functions)
 endfunction()
 
 function(test_log_to_file)
-    log_to_file(test test.log NEW)
+    log_to_file(test test.log)
     log_warn(test "This is a warning with a parameter '{1}'" x)
     log_to_console(test)
     log_info(test "info message")
     log_warn(test "This is a warning with a parameter {1}" y)
 
     file(STRINGS ${CMAKE_CURRENT_BINARY_DIR}/test.log _messages)
-    assert_same("${_messages}" "This is a warning with a parameter 'x'")
+    assert_ends_with("${_messages}" "This is a warning with a parameter 'x'")
 endfunction()
 
 message(STATUS "Run logging test...")

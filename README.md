@@ -13,7 +13,7 @@ Files
 -----
 * `GlobalMap.cmake`
 
-  Implements associative arrays using `GLOBAL` properties.  
+  Implements global maps ([key, value] associations) using `GLOBAL` properties.  
 * `Logging.cmake`
 
   Makes logging a little easier and more orderly.

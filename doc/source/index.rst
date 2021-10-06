@@ -10,9 +10,9 @@ and key to value mapping.
    :maxdepth: 2
    :caption: What's inside
 
+   DynamicFunctions
    GlobalMap
    Logging
-   PrefixFunctions
    Testing
 
 .. toctree::

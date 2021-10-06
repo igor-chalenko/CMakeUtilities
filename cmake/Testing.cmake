@@ -3,41 +3,111 @@ include(${CMAKE_CURRENT_LIST_DIR}/Logging.cmake)
 ##############################################################################
 #.rst:
 #
-# .. cmake:command:: _doxygen_assert_not_empty
+# .. cmake:command:: assert_not_empty
 #
 # .. code-block:: cmake
 #
-#    _doxygen_assert_not_empty(_value)
+#    assert_not_empty(_value)
 #
-# If the value given by ``_value`` is empty, fails with a fatal error.
+# If the string given by ``_value`` is empty, emits an error message.
 # Does nothing otherwise.
+##############################################################################
 macro(assert_not_empty _value)
     if ("${_value}" STREQUAL "")
-        log_fatal("Expected non-empty variable.")
+        log_error("Expected non-empty variable.")
     endif()
 endmacro()
 
+##############################################################################
+#.rst:
+#
+# .. cmake:command:: assert_empty
+#
+# .. code-block:: cmake
+#
+#    assert_empty(_value)
+#
+# If the string given by ``_value`` is not empty, emits an error message.
+# Does nothing otherwise.
+##############################################################################
 macro(assert_empty _value)
     if (NOT "${_value}" STREQUAL "")
-        log_fatal("Expected empty variable.")
+        log_error("Expected empty variable.")
     endif()
 endmacro()
 
+##############################################################################
+#.rst:
+#
+# .. cmake:command:: assert_same
+#
+# .. code-block:: cmake
+#
+#    assert_same(_value)
+#
+# If the strings ``str1`` and ``str2`` are not equal, emits an error message.
+# Does nothing otherwise.
+##############################################################################
 macro(assert_same str1 str2)
     if (NOT "${str1}" STREQUAL "${str2}")
-        message(SEND_ERROR "`${str1}` is not the same as `${str2}`")
+        log_error(SEND_ERROR "`${str1}` is not the same as `${str2}`")
     endif ()
 endmacro()
 
+##############################################################################
+#.rst:
+#
+# .. cmake:command:: assert_ends_with
+#
+# .. code-block:: cmake
+#
+#    assert_ends_with(_value)
+#
+# If the string ``str1`` does not end with ``str2``, emits an error message.
+# Does nothing otherwise.
+##############################################################################
+macro(assert_ends_with str1 str2)
+    string(FIND "${str1}" "${str2}" _ind)
+    string(LENGTH ${str1} _length)
+    string(LENGTH ${str2} _substr_length)
+    math(EXPR _diff "${_length} - ${_substr_length}")
+    if (NOT ${_ind} EQUAL ${_diff})
+        log_error(SEND_ERROR "`${str1}` does not end with `${str2}`")
+    endif ()
+endmacro()
+##############################################################################
+#.rst:
+#
+# .. cmake:command:: assert
+#
+# .. code-block:: cmake
+#
+#    assert(_value)
+#
+# If ``value`` evaluates to `false`, emits an error message.
+# Does nothing otherwise.
+##############################################################################
 macro(assert _value)
     if (NOT ${_value})
-        log_fatal(assert "Expected `${_value}` to evaluate to `true`.")
+        log_error(assert "Expected `${_value}` to evaluate to `true`.")
     endif()
 endmacro()
 
-function(assert_list_contains list1 el)
-    if (NOT "${el}" IN_LIST list1)
-        message(SEND_ERROR "${el} is not contained in ${list1}")
+##############################################################################
+#.rst:
+#
+# .. cmake:command:: assert
+#
+# .. code-block:: cmake
+#
+#    assert_list_contains(_list _el)
+#
+# If the list ``_list`` does not contain the element ``_el``, emits an error
+# message. Does nothing otherwise.
+##############################################################################
+function(assert_list_contains _list _el)
+    if (NOT "${_el}" IN_LIST _list)
+        message(SEND_ERROR "${_el} is not contained in ${_list}")
     endif ()
 endfunction()
 
