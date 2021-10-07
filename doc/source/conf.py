@@ -12,14 +12,14 @@ import sys
 
 # -- Project information -----------------------------------------------------
 
-project = 'doxypress-cmake'
-copyright = '2020, Igor Chalenko'
+project = 'cmake-utilities'
+copyright = '2021, Igor Chalenko'
 author = 'Igor Chalenko'
 
 # The full version, including alpha/beta/rc tags
 release = 'latest'
 
-sys.path.append('.')
+sys.path.append('')
 
 # -- General configuration ---------------------------------------------------
 
@@ -28,7 +28,7 @@ sys.path.append('.')
 # ones.
 extensions = [
     'sphinx_rtd_theme',
-    'sphinx.ext.autosectionlabel',
+    #'sphinx.ext.autosectionlabel',
     # 'sphinx.ext.pngmath',
     'cmake',
     'sphinx.ext.todo',

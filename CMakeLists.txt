@@ -5,6 +5,7 @@ if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
     include(cmake/InstallBasicPackageFiles.cmake)
 
     add_subdirectory(test)
+    add_subdirectory(doc)
 
     if (NOT DEFINED CMAKE_INSTALL_DATADIR)
         unset(CMAKE_INSTALL_DATADIR)
