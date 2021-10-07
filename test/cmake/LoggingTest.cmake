@@ -22,7 +22,6 @@ function(test_log_to_file)
     assert_ends_with("${_messages}" "This is a warning with a parameter 'x'")
 endfunction()
 
-message(STATUS "Run logging test...")
 test_log_functions()
 test_log_to_file()
 
