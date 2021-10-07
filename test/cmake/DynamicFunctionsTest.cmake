@@ -1,6 +1,8 @@
-include(${PROJECT_SOURCE_DIR}/cmake/Testing.cmake)
-include(${PROJECT_SOURCE_DIR}/cmake/Logging.cmake)
-include(${PROJECT_SOURCE_DIR}/cmake/DynamicFunctions.cmake)
+set(_project_source_dir "${CMAKE_CURRENT_BINARY_DIR}/../../")
+
+include(${_project_source_dir}/cmake/Testing.cmake)
+include(${_project_source_dir}/cmake/Logging.cmake)
+include(${_project_source_dir}/cmake/DynamicFunctions.cmake)
 
 parameter_to_function_prefix(doxygen
         global_set

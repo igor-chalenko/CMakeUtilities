@@ -1,5 +1,7 @@
-include(${PROJECT_SOURCE_DIR}/cmake/Testing.cmake)
-include(${PROJECT_SOURCE_DIR}/cmake/Logging.cmake)
+set(_project_source_dir "${CMAKE_CURRENT_BINARY_DIR}/../../")
+
+include(${_project_source_dir}/cmake/Testing.cmake)
+include(${_project_source_dir}/cmake/Logging.cmake)
 
 function(test_log_functions)
     log_color(INFO MAGENTA)
@@ -22,7 +24,6 @@ function(test_log_to_file)
     assert_ends_with("${_messages}" "This is a warning with a parameter 'x'")
 endfunction()
 
-message(STATUS "Run logging test...")
 test_log_functions()
 test_log_to_file()
 

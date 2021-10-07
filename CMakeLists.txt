@@ -1,8 +1,10 @@
-cmake_minimum_required(VERSION 3.20)
+cmake_minimum_required(VERSION 3.18)
 project(cmake-utilities VERSION 0.1)
 
 if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
     include(cmake/InstallBasicPackageFiles.cmake)
+
+    enable_testing()
 
     add_subdirectory(test)
     add_subdirectory(doc)
