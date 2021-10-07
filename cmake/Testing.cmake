@@ -7,14 +7,14 @@ include(${CMAKE_CURRENT_LIST_DIR}/Logging.cmake)
 #
 # .. code-block:: cmake
 #
-#    assert_not_empty(_value)
+#    assert_not_empty(value)
 #
-# If the string given by ``_value`` is empty, emits an error message.
+# If the string given by ``value`` is empty, emits an error message.
 # Does nothing otherwise.
 ##############################################################################
-macro(assert_not_empty _value)
-    if ("${_value}" STREQUAL "")
-        log_error("Expected non-empty variable.")
+macro(assert_not_empty value)
+    if ("${value}" STREQUAL "")
+        log_error(test "Expected non-empty variable.")
     endif()
 endmacro()
 
@@ -25,14 +25,14 @@ endmacro()
 #
 # .. code-block:: cmake
 #
-#    assert_empty(_value)
+#    assert_empty(value)
 #
-# If the string given by ``_value`` is not empty, emits an error message.
+# If the string given by ``value`` is not empty, emits an error message.
 # Does nothing otherwise.
 ##############################################################################
-macro(assert_empty _value)
-    if (NOT "${_value}" STREQUAL "")
-        log_error("Expected empty variable.")
+macro(assert_empty value)
+    if (NOT "${value}" STREQUAL "")
+        log_error(test "Expected empty variable.")
     endif()
 endmacro()
 
@@ -43,14 +43,14 @@ endmacro()
 #
 # .. code-block:: cmake
 #
-#    assert_same(_value)
+#    assert_same(value)
 #
 # If the strings ``str1`` and ``str2`` are not equal, emits an error message.
 # Does nothing otherwise.
 ##############################################################################
 macro(assert_same str1 str2)
     if (NOT "${str1}" STREQUAL "${str2}")
-        log_error(SEND_ERROR "`${str1}` is not the same as `${str2}`")
+        log_error(test "`${str1}` is not the same as `${str2}`")
     endif ()
 endmacro()
 
@@ -61,7 +61,7 @@ endmacro()
 #
 # .. code-block:: cmake
 #
-#    assert_ends_with(_value)
+#    assert_ends_with(value)
 #
 # If the string ``str1`` does not end with ``str2``, emits an error message.
 # Does nothing otherwise.
@@ -72,7 +72,7 @@ macro(assert_ends_with str1 str2)
     string(LENGTH ${str2} _substr_length)
     math(EXPR _diff "${_length} - ${_substr_length}")
     if (NOT ${_ind} EQUAL ${_diff})
-        log_error(SEND_ERROR "`${str1}` does not end with `${str2}`")
+        log_error(test "`${str1}` does not end with `${str2}`")
     endif ()
 endmacro()
 ##############################################################################
@@ -82,14 +82,14 @@ endmacro()
 #
 # .. code-block:: cmake
 #
-#    assert(_value)
+#    assert(value)
 #
 # If ``value`` evaluates to `false`, emits an error message.
 # Does nothing otherwise.
 ##############################################################################
-macro(assert _value)
-    if (NOT ${_value})
-        log_error(assert "Expected `${_value}` to evaluate to `true`.")
+macro(assert value)
+    if (NOT ${value})
+        log_error(test "Expected `${value}` to evaluate to `true`.")
     endif()
 endmacro()
 
@@ -107,7 +107,7 @@ endmacro()
 ##############################################################################
 function(assert_list_contains _list _el)
     if (NOT "${_el}" IN_LIST _list)
-        message(SEND_ERROR "${_el} is not contained in ${_list}")
+        log_error(test "${_el} is not contained in ${_list}")
     endif ()
 endfunction()
 

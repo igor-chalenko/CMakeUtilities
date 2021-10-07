@@ -8,12 +8,12 @@
 #
 # For each given function `fn`, creates a counterpart `${_prefix}_${fn}` that
 # has all the parameters of the original function except the first one, and
-# does nothing but calls `fn` with the given arguments.
+# does nothing but calls `fn` with the arguments given to `${_prefix}_${fn}`.
 #
 # .. note::
-# Since the argument count changes, the logic that depends on `ARGN`, `ARGC`
-# and other values that are different in the wrapper function compared to
-# the original, may change.
+#    Since the argument count changes, the logic that depends on `ARGN`, `ARGC`
+#    and similar values, may break. Be careful when wrapping a function that
+#    depends on exact argument count and order.
 #
 ##############################################################################
 function(parameter_to_function_prefix _prefix)
@@ -37,14 +37,14 @@ endfunction()
 #
 # For each given function `fn`, creates a counterpart `_trace_fn` that prints
 # a trace message `called fn(${ARGN})` into the log context `fn` and then calls
-# the original function with unchanged arguments. For example:
+# the original function with the unchanged arguments. For example:
 #
 # .. code-block:: cmake
 #
 #    trace_functions(global_set)
 #    log_level(global_set TRACE)
 #    log_to_file(global_set global_set.log)
-#    # will append 'called global_set(a bcd)' to 'global_set.log'
+#    # will append 'global_set(a bcd)' to 'global_set.log'
 #    # before calling 'global_set'
 #    _trace_global_set(a bcd)
 #
@@ -59,7 +59,7 @@ macro(_trace_${_fun})
         string(APPEND _args \" \${_arg}\")
     endforeach()
     string(SUBSTRING \"\${_args}\" 1 -1 _args)
-    log_trace(${_fun} \"called ${_fun}(\${_args})\")
+    log_trace(${_fun} \"${_fun}(\${_args})\")
     ${_fun}(${_fun} \${ARGN})
 endmacro()
 ")

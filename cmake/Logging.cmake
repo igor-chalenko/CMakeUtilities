@@ -292,10 +292,7 @@ endfunction()
 #
 #    log_info(_context _message <message arguments>)
 #
-# Formats the given message and prints it either to a console or to a file.
-# The messages have the following format:
-# [<<timestamp>>][<<context>>][INFO] <<message after substitutions>>>
-# This function is a wrapper around ``log_message``.
+# Calls ``log_message`` with the level set to `INFO`.
 ##############################################################################
 function(log_info _context _message)
     log_message(INFO "${_context}" "${_message}" ${ARGN})
@@ -303,17 +300,15 @@ endfunction()
 
 ##############################################################################
 #.rst:
+# .. _log_error_reference_label:
+#
 # .. cmake:command:: log_error
 #
 # .. code-block:: cmake
 #
 #    log_error(_context _message <message arguments>)
 #
-# Formats the given message and prints it either to a console or to a file.
-# Then, raises a CMake error via `message(SEND_ERROR)`.
-# The messages have the following format:
-# [<<timestamp>>][<<context>>][ERROR] <<message after substitutions>>>
-# This function is a wrapper around ``log_message``.
+# Calls ``log_message`` with the level set to `ERROR`.
 ##############################################################################
 function(log_error _context _message)
     log_message(ERROR "${_context}" "${_message}" ${ARGN})
@@ -327,11 +322,7 @@ endfunction()
 #
 #    log_warn(_context _message <message arguments>)
 #
-# Formats the given message and prints it either to a console or to a file.
-# Then, raises a CMake error via `message(FATAL_ERROR)`.
-# The messages have the following format:
-# [<<timestamp>>][<<context>>][FATAL] <<message after substitutions>>>
-# This function is a wrapper around ``log_message``.
+# Calls ``log_message`` with the level set to `FATAL`.
 ##############################################################################
 function(log_fatal _context _message)
     log_message(FATAL "${_context}" "${_message}" ${ARGN})

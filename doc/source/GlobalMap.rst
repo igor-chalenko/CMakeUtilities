@@ -1,8 +1,9 @@
 Global maps
 ===========
 
-A global map is a set of [key, value] pairs with the same prefix in their keys.
-In the implementation, these properties are created by the calls to
+A global map models an association between a name and one or more
+[`key`, `value`] pairs. In the implementation, these pairs are
+saved by the calls to
 
 .. code-block:: cmake
 

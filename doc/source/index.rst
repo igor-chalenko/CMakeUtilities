@@ -19,8 +19,8 @@ and key to value mapping.
    :maxdepth: 1
    :caption: Additional info
 
-   changelog
-   license
+   ChangeLog
+   License
 
 Indices and tables
 ==================

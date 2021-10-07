@@ -20,6 +20,6 @@ log_level(global_set TRACE)
 log_to_file(global_set global_set.log)
 _trace_global_set(a bcd)
 file(STRINGS ${CMAKE_CURRENT_BINARY_DIR}/global_set.log _messages)
-assert_ends_with("${_messages}" "called global_set(a bcd)")
+assert_ends_with("${_messages}" "global_set(a bcd)")
 
 
