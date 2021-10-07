@@ -58,100 +58,6 @@ if (CMAKE_COLOURISED_OUTPUT OR CMAKE_COLORIZED_OUTPUT)
     endif()
 endif()
 
-function(_log_levels _out_var)
-    set(${_out_var} "TRACE;DEBUG;INFO;WARN;ERROR" PARENT_SCOPE)
-endfunction()
-
-##############################################################################
-#.rst:
-# .. cmake:command:: log_color
-#
-# .. code-block:: cmake
-#
-#    log_color(_level _color)
-#
-# Specifies a color of the subsequent messages of the level ``_level``.
-##############################################################################
-function(log_color _level _color)
-    global_set(log.color. ${_level} ${_color})
-endfunction()
-
-##############################################################################
-#.rst:
-# .. cmake:command:: log_parameter_color
-#
-# .. code-block:: cmake
-#
-#    log_parameter_color(_level)
-#
-# Specifies a color of the parameters of the subsequent messages of the level
-# ``_level``.
-##############################################################################
-function(log_parameter_color _level _color)
-    global_set(log.parameter.color. ${_level} ${_color})
-endfunction()
-
-##############################################################################
-#.rst:
-# .. cmake:command:: log_color_reset
-#
-# .. code-block:: cmake
-#
-#    log_color_reset(_level)
-#
-# Removes color setting for the messages of the level ``_level``.
-##############################################################################
-function(log_color_reset _level)
-    global_unset(log.color. ${_level})
-endfunction()
-
-##############################################################################
-#.rst:
-# .. cmake:command:: log_color_reset
-#
-# .. code-block:: cmake
-#
-#    log_color_reset(_level)
-#
-# Removes color setting for the parameters of the messages of the level
-# ``_level``.
-##############################################################################
-function(log_parameter_color_reset _level)
-    global_unset(log.parameter.color. ${_level})
-endfunction()
-
-function(_log_format_message _out_message _message)
-    global_get(log.context.${_context}. file _file_name)
-
-    if ("${_file_name}" STREQUAL "")
-        global_get(log.color. ${_level} _color)
-        global_get(log.parameter.color. ${_level} _parameter_color)
-    else()
-        set(_color "")
-        set(_parameter_color "")
-    endif()
-
-    set(_index 2)
-    foreach(_arg ${ARGN})
-        math(EXPR _base_index "${_index} - 1")
-        if (_parameter_color)
-            message(STATUS "_parameter_color = ${_parameter_color}, _color = ${_color}")
-            string(REPLACE 
-                    "{${_base_index}}" 
-                    "${${_parameter_color}}${ARGV${_index}}${COLOR_RESET}${${_color}}"
-                    _message 
-                    "${_message}")
-        else()
-            string(REPLACE "{${_base_index}}" "${ARGV${_index}}" _message "${_message}")
-        endif()
-        math(EXPR _index "${_index} + 1")
-    endforeach()
-    if (_color)
-        set(_message "${${_color}}${_message}${COLOR_RESET}")
-    endif()
-    set(${_out_message} "${_message}" PARENT_SCOPE)
-endfunction()
-
 ##############################################################################
 #.rst:
 # .. cmake:command:: log_message
@@ -340,4 +246,107 @@ endfunction()
 ##############################################################################
 function(log_warn _context _message)
     log_message(WARN "${_context}" "${_message}" ${ARGN})
+endfunction()
+
+##############################################################################
+#.rst:
+# .. cmake:command:: log_color
+#
+# .. code-block:: cmake
+#
+#    log_color(_level _color)
+#
+# Specifies a color of the subsequent messages of the level ``_level``.
+##############################################################################
+function(log_color _level _color)
+    global_set(log.color. ${_level} ${_color})
+endfunction()
+
+##############################################################################
+#.rst:
+# .. cmake:command:: log_parameter_color
+#
+# .. code-block:: cmake
+#
+#    log_parameter_color(_level)
+#
+# Specifies a color of the parameters of the subsequent messages of the level
+# ``_level``.
+##############################################################################
+function(log_parameter_color _level _color)
+    global_set(log.parameter.color. ${_level} ${_color})
+endfunction()
+
+##############################################################################
+#.rst:
+# .. cmake:command:: log_color_reset
+#
+# .. code-block:: cmake
+#
+#    log_color_reset(_level)
+#
+# Removes color setting for the messages of the level ``_level``.
+##############################################################################
+function(log_color_reset _level)
+    global_unset(log.color. ${_level})
+endfunction()
+
+##############################################################################
+#.rst:
+# .. cmake:command:: log_parameter_color_reset
+#
+# .. code-block:: cmake
+#
+#    log_parameter_color_reset(_level)
+#
+# Removes color setting for the parameters of the messages of the level
+# ``_level``.
+##############################################################################
+function(log_parameter_color_reset _level)
+    global_unset(log.parameter.color. ${_level})
+endfunction()
+
+##############################################################################
+# Returns the known log levels.
+# Not a part of the public API.
+##############################################################################
+function(_log_levels _out_var)
+    set(${_out_var} "TRACE;DEBUG;INFO;WARN;ERROR" PARENT_SCOPE)
+endfunction()
+
+##############################################################################
+# Formats the given message:
+# - substitutes the parameters, applying currently configured colors to the parameters
+# Not a part of the public API.
+##############################################################################
+function(_log_format_message _out_message _message)
+    global_get(log.context.${_context}. file _file_name)
+
+    if ("${_file_name}" STREQUAL "")
+        global_get(log.color. ${_level} _color)
+        global_get(log.parameter.color. ${_level} _parameter_color)
+    else()
+        set(_color "")
+        set(_parameter_color "")
+    endif()
+
+    set(_index 2)
+    foreach(_arg ${ARGN})
+        math(EXPR _base_index "${_index} - 1")
+        if (_parameter_color)
+            message(STATUS "_parameter_color = ${_parameter_color}, _color = ${_color}")
+            string(REPLACE
+                    "{${_base_index}}"
+                    "${${_parameter_color}}${ARGV${_index}}${COLOR_RESET}${${_color}}"
+                    _message
+                    "${_message}")
+        else()
+            string(REPLACE "{${_base_index}}" "${ARGV${_index}}" _message "${_message}")
+        endif()
+        math(EXPR _index "${_index} + 1")
+    endforeach()
+    if (_color)
+        set(_message "${${_color}}${_message}${COLOR_RESET}")
+    endif()
+    set(${_out_message} "${_message}" PARENT_SCOPE)
 endfunction()

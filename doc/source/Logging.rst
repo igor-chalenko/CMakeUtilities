@@ -2,14 +2,15 @@ Logging
 =======
 
 This module implements a set of functions for logging messages either to
-a console or to a file. The messages have the following format:
+a console or to a file. Every message has a context that acts as a searchable
+tag, and optional parameters that will be substituted into the message by
+replacing placeholders `{1}`, `{2}`, etc. Output have the following format:
 
 .. code-block::
 
   [<timestamp>][<context>][<level>] <message after substitutions>
 
-All logging functions accept an additional argument `context`, which acts as
-a tag in the message being logged. Here's a few examples:
+For example,
 
 .. code-block:: cmake
 
@@ -23,7 +24,9 @@ a tag in the message being logged. Here's a few examples:
 If enabled by the CMake option `CMAKE_COLORIZED_OUTPUT`, and if supported by
 the terminal, messages of different level will have a different color.
 Additionally, any parameters substituted into the message via `{1}`, `{2}`,
-... marks, will have their own color as well.
+... marks, will have their own color as well. Notice the parameter `examples`
+after the main message in the example above. Parameters are entirely
+optional; they are only for coloring.
 
 ===========
 When to use

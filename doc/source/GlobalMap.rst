@@ -45,9 +45,5 @@ writing something like
 just to append a value to an existing property becomes a tedious,
 error-prone task.
 
-=========
-Functions
-=========
-
 .. cmake-module:: ../../cmake/GlobalMap.cmake
 
