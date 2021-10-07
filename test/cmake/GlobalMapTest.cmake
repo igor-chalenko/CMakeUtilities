@@ -1,5 +1,7 @@
-include(${PROJECT_SOURCE_DIR}/cmake/Testing.cmake)
-include(${PROJECT_SOURCE_DIR}/cmake/GlobalMap.cmake)
+set(_project_source_dir "${CMAKE_CURRENT_BINARY_DIR}/../../")
+
+include(${_project_source_dir}/cmake/Testing.cmake)
+include(${_project_source_dir}/cmake/GlobalMap.cmake)
 
 global_set(prefix a b)
 global_get(prefix a _var)

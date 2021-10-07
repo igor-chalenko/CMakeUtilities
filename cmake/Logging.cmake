@@ -334,7 +334,6 @@ function(_log_format_message _out_message _message)
     foreach(_arg ${ARGN})
         math(EXPR _base_index "${_index} - 1")
         if (_parameter_color)
-            message(STATUS "_parameter_color = ${_parameter_color}, _color = ${_color}")
             string(REPLACE
                     "{${_base_index}}"
                     "${${_parameter_color}}${ARGV${_index}}${COLOR_RESET}${${_color}}"
