@@ -31,9 +31,6 @@ extensions = [
     'sphinx_rtd_theme',
     'cmake',
     'sphinx.ext.todo',
-    'sphinx_search.extension',
-    #'sphinx.ext.autosectionlabel',
-    # 'sphinx.ext.pngmath',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
