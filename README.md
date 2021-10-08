@@ -11,23 +11,26 @@ at [Read the Docs](https://readthedocs.io/).
 
 Files
 -----
+* `DynamicFunctions.cmake`
+
+  Dynamically wraps a given list of functions into a new list where every
+  function has an optional prologue/epilogue and calls the original function
+  with the possibly amended arguments. Uses
+  [cmake_language](https://cmake.org/cmake/help/latest/command/cmake_language.html).
+
 * `GlobalMap.cmake`
 
-  Implements global maps ([key, value] associations) using `GLOBAL` properties.  
+  Implements global maps ([key, value] associations) using `GLOBAL` properties.
+
 * `Logging.cmake`
 
   Makes logging a little easier and more orderly.
-* `PrefixFunctions.cmake`
 
-  Dynamically wraps a given list of functions into a new list where every 
-  function:
-  - does the same thing as the original one;
-  - has one less argument;
-  - has the name of `prefix`_`original_function_name`.
 * `Testing.cmake`
 
   Implements test assertions, such as `assert_empty`, `assert_same`, etc.
   For use in tests.
+
 * `InstallBasicPackageFiles.cmake`
 
   A helper module that generates CMake's config and config version files.
@@ -54,7 +57,7 @@ Files
 
 Dependencies
 ------------
- - `CMake` 3.20 or greater
+ - `CMake` 3.18 or greater
 
 Installation
 ------------
