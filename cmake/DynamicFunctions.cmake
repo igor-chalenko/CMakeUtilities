@@ -9,6 +9,7 @@ macro(parameter_to_function_prefix_1 _fun _prefix _arg1)
 endmacro()
 
 macro(parameter_to_function_prefix_2 _fun _prefix _arg1 _arg2)
+    message(STATUS "[parameter_to_function_prefix_2] ${_prefix} \"${_arg1}\" \"${_arg2}")
     cmake_language(EVAL CODE "${_fun}(${_prefix} \"${_arg1}\" \"${_arg2}\")")
 endmacro()
 
