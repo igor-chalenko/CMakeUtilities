@@ -45,7 +45,7 @@ cmake_policy(SET CMP0054 NEW)
 #
 ##############################################################################
 function(global_set map_name property value)
-    _global_index(${map_name} _index)
+    global_index(${map_name} _index)
     list(FIND _index "${map_name}${property}" _ind)
     set_property(GLOBAL PROPERTY "${map_name}${property}" ${value})
     if (_ind EQUAL -1)
@@ -76,7 +76,7 @@ endfunction()
 #    endforeach()
 ##############################################################################
 function(global_set_if_empty map_name property value)
-    _global_index(${map_name} _index)
+    global_index(${map_name} _index)
     list(FIND _index "${map_name}${property}" _ind)
     if (_ind EQUAL -1)
         set_property(GLOBAL PROPERTY "${map_name}${property}" ${value})
@@ -125,7 +125,7 @@ endfunction()
 #
 ##############################################################################
 function(global_append map_name property value)
-    _global_index(${map_name} _index)
+    global_index(${map_name} _index)
 
     global_get(${map_name} ${property} _current_value)
     if ("${_current_value}" STREQUAL "")
@@ -161,7 +161,7 @@ endfunction()
 #    assert_not_empty("${value}")
 ##############################################################################
 function(global_unset map_name property)
-    _global_index(${map_name} _index)
+    global_index(${map_name} _index)
     list(FIND _index "${map_name}${property}" _ind)
     if (NOT _ind EQUAL -1)
         set_property(GLOBAL PROPERTY "${map_name}${property}")
@@ -198,7 +198,7 @@ endfunction()
 #    assert_empty("${value}")
 ##############################################################################
 function(global_clear map_name)
-    _global_index(${map_name} _index)
+    global_index(${map_name} _index)
     foreach(property ${_index})
         set_property(GLOBAL PROPERTY "${property}")
     endforeach()
@@ -272,7 +272,7 @@ endfunction()
 # Sets the output variable ``out_var`` to store the index of the global map
 # ``map_name``. Not a part of the public API.
 ##############################################################################
-function(_global_index map_name out_var)
+function(global_index map_name out_var)
     global_get(${map_name} property.index _index)
     set(${out_var} "${_index}" PARENT_SCOPE)
 endfunction()

@@ -10,9 +10,9 @@ if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
     add_subdirectory(doc)
 
     if (NOT DEFINED CMAKE_INSTALL_DATADIR)
-        unset(CMAKE_INSTALL_DATADIR)
         include(GNUInstallDirs)
     endif()
+    message(STATUS "CMAKE_INSTALL_DATADIR = ${CMAKE_INSTALL_DATADIR}")
     set(_DESTINATION ${CMAKE_INSTALL_DATADIR}/cmake/${PROJECT_NAME})
     install_basic_package_files(${PROJECT_NAME}
             VERSION ${PROJECT_VERSION}
