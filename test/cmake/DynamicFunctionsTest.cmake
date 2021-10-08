@@ -7,11 +7,18 @@ include(${_project_source_dir}/cmake/DynamicFunctions.cmake)
 parameter_to_function_prefix(doxygen
         global_set
         global_get
+        test_fn
         )
 
+global_set(doxygen a b)
 doxygen_global_set(a b)
 doxygen_global_get(a _var)
 assert_same(${_var} b)
+
+# test for https://github.com/igor-chalenko/cmake-utilities/issues/9
+doxygen_global_set(key "")
+doxygen_global_get(key _var)
+assert_empty("${_var}")
 
 trace_functions(global_set)
 log_level(global_set TRACE)

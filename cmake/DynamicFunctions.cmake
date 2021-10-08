@@ -1,3 +1,29 @@
+cmake_policy(SET CMP0054 NEW)
+
+macro(parameter_to_function_prefix_0 _fun _prefix)
+    cmake_language(EVAL CODE "${_fun}(${_prefix})")
+endmacro()
+
+macro(parameter_to_function_prefix_1 _fun _prefix _arg1)
+    cmake_language(EVAL CODE "${_fun}(${_prefix} \"${_arg1}\")")
+endmacro()
+
+macro(parameter_to_function_prefix_2 _fun _prefix _arg1 _arg2)
+    cmake_language(EVAL CODE "${_fun}(${_prefix} \"${_arg1}\" \"${_arg2}\")")
+endmacro()
+
+macro(parameter_to_function_prefix_3 _fun _prefix _arg1 _arg2 _arg3)
+    cmake_language(EVAL CODE "${_fun}(${_prefix} \"${_arg1}\" \"${_arg2}\" \"${_arg3}\")")
+endmacro()
+
+macro(parameter_to_function_prefix_4 _fun _prefix _arg1 _arg2 _arg3 _arg4)
+    cmake_language(EVAL CODE "${_fun}(${_prefix} \"${_arg1}\" \"${_arg2}\" \"${_arg3}\" \"${_arg4}\")")
+endmacro()
+
+macro(parameter_to_function_prefix_4 _fun _prefix _arg1 _arg2 _arg3 _arg4 _arg5)
+    cmake_language(EVAL CODE "${_fun}(${_prefix} \"${_arg1}\" \"${_arg2}\" \"${_arg3}\" \"${_arg4}\" \"${_arg5}\")")
+endmacro()
+
 ##############################################################################
 #.rst:
 # .. cmake:command:: parameter_to_function_prefix
@@ -21,7 +47,21 @@ function(parameter_to_function_prefix _prefix)
         log_debug(parameter_to_function_prefix "inject ${_prefix}_${_fun}")
         cmake_language(EVAL CODE "
 macro(${_prefix}_${_fun})
-    ${_fun}(${_prefix} \${ARGN})
+    if (\${ARGC} EQUAL 0)
+        parameter_to_function_prefix(\"${_fun}\" \"${_prefix}\")
+    elseif (\${ARGC} EQUAL 1)
+        parameter_to_function_prefix_1(\"${_fun}\" \"${_prefix}\" \"\${ARGV0}\")
+    elseif (\${ARGC} EQUAL 2)
+        parameter_to_function_prefix_2(\"${_fun}\" \"${_prefix}\" \"\${ARGV0}\" \"\${ARGV1}\")
+    elseif (\${ARGC} EQUAL 3)
+        parameter_to_function_prefix_3(\"${_fun}\" \"${_prefix}\" \"\${ARGV0}\" \"\${ARGV1}\" \"\${ARGV2}\")
+    elseif (\${ARGC} EQUAL 4)
+        parameter_to_function_prefix_4(\"${_fun}\" \"${_prefix}\" \"\${ARGV0}\" \"\${ARGV1}\" \"\${ARGV2}\" \"\${ARGV3}\")
+    elseif (\${ARGC} EQUAL 5)
+        parameter_to_function_prefix_5(\"${_fun}\" \"${_prefix}\" \"\${ARGV0}\" \"\${ARGV1}\" \"\${ARGV2}\" \"\${ARGV3}\" \"\${ARGV4}\")
+    else()
+        message(FATAL_ERROR \"todo\")
+    endif()
 endmacro()
 ")
     endforeach()
