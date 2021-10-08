@@ -9,55 +9,6 @@ cmake_policy(SET CMP0011 NEW)
 
 include(${CMAKE_CURRENT_LIST_DIR}/GlobalMap.cmake)
 
-string(ASCII 27 Esc)
-set(RED          "")
-set(COLOR_RESET  "")
-set(GREEN        "")
-set(YELLOW       "")
-set(BLUE         "")
-set(MAGENTA      "")
-set(CYAN         "")
-set(WHITE        "")
-
-macro(set_default_color_sequences)
-    set(GREEN        "${Esc}[32m")
-    set(YELLOW       "${Esc}[33m")
-    set(BLUE         "${Esc}[34m")
-    set(MAGENTA      "${Esc}[35m")
-    set(CYAN         "${Esc}[36m")
-    set(WHITE        "${Esc}[37m")
-    set(COLOR_RESET "${Esc}[m")
-    set(RED          "${Esc}[31m")
-endmacro()
-
-if (CMAKE_COLOURISED_OUTPUT OR CMAKE_COLORIZED_OUTPUT)
-    # tput is available on Windows in shells such as msys2, cygwin, git-bash, and others
-    # if the command below fails, colors will be disabled
-    execute_process(COMMAND tput colors OUTPUT_VARIABLE _colors OUTPUT_STRIP_TRAILING_WHITESPACE)
-    if (_colors)
-        if (_colors EQUAL 256)
-            # set red color
-            execute_process(COMMAND tput setaf 202 OUTPUT_VARIABLE RED OUTPUT_STRIP_TRAILING_WHITESPACE)
-            execute_process(COMMAND tput setaf 201 OUTPUT_VARIABLE WHITE OUTPUT_STRIP_TRAILING_WHITESPACE)
-        elseif(_colors LESS_EQUAL 16)
-            set_default_color_sequences()
-        endif()
-    elseif(WIN32)
-        # I don't know of a way to reliably get terminal information on Windows
-        # Just disable the colors if this doesn't work
-        # It does work in powershell on Windows 10 starting with some recent updates
-        set_default_color_sequences()
-    endif()
-
-    if (VERBOSE)
-        if (_colors)
-            message(STATUS "This terminal supports ${_colors} colors")
-        elseif(NOT WIN32)
-            message(STATUS "Assuming no support for colored output on this terminal")
-        endif()
-    endif()
-endif()
-
 ##############################################################################
 #.rst:
 # .. cmake:command:: log_message
@@ -249,64 +200,6 @@ function(log_warn _context _message)
 endfunction()
 
 ##############################################################################
-#.rst:
-# .. cmake:command:: log_color
-#
-# .. code-block:: cmake
-#
-#    log_color(_level _color)
-#
-# Specifies a color of the subsequent messages of the level ``_level``.
-##############################################################################
-function(log_color _level _color)
-    global_set(log.color. ${_level} ${_color})
-endfunction()
-
-##############################################################################
-#.rst:
-# .. cmake:command:: log_parameter_color
-#
-# .. code-block:: cmake
-#
-#    log_parameter_color(_level)
-#
-# Specifies a color of the parameters of the subsequent messages of the level
-# ``_level``.
-##############################################################################
-function(log_parameter_color _level _color)
-    global_set(log.parameter.color. ${_level} ${_color})
-endfunction()
-
-##############################################################################
-#.rst:
-# .. cmake:command:: log_color_reset
-#
-# .. code-block:: cmake
-#
-#    log_color_reset(_level)
-#
-# Removes color setting for the messages of the level ``_level``.
-##############################################################################
-function(log_color_reset _level)
-    global_unset(log.color. ${_level})
-endfunction()
-
-##############################################################################
-#.rst:
-# .. cmake:command:: log_parameter_color_reset
-#
-# .. code-block:: cmake
-#
-#    log_parameter_color_reset(_level)
-#
-# Removes color setting for the parameters of the messages of the level
-# ``_level``.
-##############################################################################
-function(log_parameter_color_reset _level)
-    global_unset(log.parameter.color. ${_level})
-endfunction()
-
-##############################################################################
 # Returns the known log levels.
 # Not a part of the public API.
 ##############################################################################
@@ -315,37 +208,17 @@ function(_log_levels _out_var)
 endfunction()
 
 ##############################################################################
-# Formats the given message:
-# - substitutes the parameters, applying currently configured colors to the parameters
+# Substitutes the parameters given ib `ARGN`
 # Not a part of the public API.
 ##############################################################################
 function(_log_format_message _out_message _message)
     global_get(log.context.${_context}. file _file_name)
 
-    if ("${_file_name}" STREQUAL "")
-        global_get(log.color. ${_level} _color)
-        global_get(log.parameter.color. ${_level} _parameter_color)
-    else()
-        set(_color "")
-        set(_parameter_color "")
-    endif()
-
     set(_index 2)
     foreach(_arg ${ARGN})
         math(EXPR _base_index "${_index} - 1")
-        if (_parameter_color)
-            string(REPLACE
-                    "{${_base_index}}"
-                    "${${_parameter_color}}${ARGV${_index}}${COLOR_RESET}${${_color}}"
-                    _message
-                    "${_message}")
-        else()
-            string(REPLACE "{${_base_index}}" "${ARGV${_index}}" _message "${_message}")
-        endif()
+        string(REPLACE "{${_base_index}}" "${ARGV${_index}}" _message "${_message}")
         math(EXPR _index "${_index} + 1")
     endforeach()
-    if (_color)
-        set(_message "${${_color}}${_message}${COLOR_RESET}")
-    endif()
     set(${_out_message} "${_message}" PARENT_SCOPE)
 endfunction()

@@ -21,12 +21,8 @@ For example,
    # message appended to test.log
    log_warn(test "ICU not found")
 
-If enabled by the CMake option `CMAKE_COLORIZED_OUTPUT`, and if supported by
-the terminal, messages of different level will have a different color.
-Additionally, any parameters substituted into the message via `{1}`, `{2}`,
-... marks, will have their own color as well. Notice the parameter `examples`
-after the main message in the example above. Parameters are entirely
-optional; they are only for coloring.
+Notice the parameter `examples` after the main message in the example above.
+Use of parameters is entirely optional; they are only for readability.
 
 ===========
 When to use
