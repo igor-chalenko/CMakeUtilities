@@ -4,13 +4,9 @@ include(${_project_source_dir}/cmake/Testing.cmake)
 include(${_project_source_dir}/cmake/Logging.cmake)
 
 function(test_log_functions)
-    log_color(INFO MAGENTA)
-    log_parameter_color(INFO GREEN)
     log_info(test "Path {1} will be changed to {2}" examples "${PROJECT_SOURCE_DIR}/examples")
     log_level(test DEBUG)
     log_debug(test "Path {1} will be changed to {2}" examples "${PROJECT_SOURCE_DIR}/examples")
-    log_color_reset(INFO)
-    log_parameter_color_reset(INFO)
 endfunction()
 
 function(test_log_to_file)

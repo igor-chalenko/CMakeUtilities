@@ -3,6 +3,8 @@ project(cmake-utilities-test VERSION 0.1)
 #include(cmake/LoggingTest.cmake)
 #include(cmake/DynamicFunctionsTest.cmake)
 
+include(${PROJECT_SOURCE_DIR}/../cmake/Logging.cmake)
+
 add_test(
         NAME global_map_test
         COMMAND ${CMAKE_COMMAND} -P ${PROJECT_SOURCE_DIR}/cmake/GlobalMapTest.cmake

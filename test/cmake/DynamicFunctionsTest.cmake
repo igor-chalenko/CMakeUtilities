@@ -6,12 +6,8 @@ include(${_project_source_dir}/cmake/DynamicFunctions.cmake)
 
 parameter_to_function_prefix(doxygen
         global_set
-        global_unset
         global_get
-        global_append
-        global_clear
-        global_index
-        global_set_index)
+        )
 
 doxygen_global_set(a b)
 doxygen_global_get(a _var)
