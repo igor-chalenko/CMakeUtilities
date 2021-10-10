@@ -89,7 +89,11 @@ endmacro()
 ##############################################################################
 macro(assert value)
     if (NOT ${value})
-        log_error(test "Expected `${value}` to evaluate to `true`.")
+        if (${ARGC} EQUAL "2")
+            log_error(test ${ARGV1})
+        else()
+            log_error(test "Expected `${value}` to evaluate to `true`.")
+        endif()
     endif()
 endmacro()
 

@@ -1,3 +1,10 @@
+#############################################################################
+# Copyright (c) 2020 Igor Chalenko
+# Distributed under the MIT license.
+# See accompanying file LICENSE.md.md or copy at
+# https://opensource.org/licenses/MIT
+##############################################################################
+
 cmake_minimum_required(VERSION 3.18)
 project(cmake-utilities VERSION 0.1)
 
@@ -12,7 +19,9 @@ if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
     if (NOT DEFINED CMAKE_INSTALL_DATADIR)
         include(GNUInstallDirs)
     endif()
-    message(STATUS "CMAKE_INSTALL_DATADIR = ${CMAKE_INSTALL_DATADIR}")
+    #if (VERBOSE)
+        message(STATUS "Installing to ${CMAKE_INSTALL_PREFIX}/${CMAKE_INSTALL_DATADIR}")
+    #endif()
     set(_DESTINATION ${CMAKE_INSTALL_DATADIR}/cmake/${PROJECT_NAME})
     install_basic_package_files(${PROJECT_NAME}
             VERSION ${PROJECT_VERSION}
