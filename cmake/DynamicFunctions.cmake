@@ -191,7 +191,40 @@ endmacro()
     endforeach()
 endfunction()
 
+##############################################################################
+#.rst:
+# .. cmake:command:: dynamic_call
+#
+# .. code-block:: cmake
+#
+#    dynamic_call(<function> <argument list>)
+#
+# Calls the given function with the given arguments. For example:
+#
+# .. code-block:: cmake
+#
+#    log_level(dynamic_call TRACE)
+#    log_to_file(dynamic_call dynamic_call.log)
+#    dynamic_call(${function_name} ${ARGN})
+#    # will append 'global_set(a bcd)' to 'global_set.log'
+#    # before calling 'global_set'
+#    _trace_global_set(a bcd)
+#
+##############################################################################
 macro(dynamic_call _fun)
+    if (${ARGC} EQUAL 1)
+        log_trace(dynamic_call "${_fun}(\"${ARGV1}\")")
+    elseif (${ARGC} EQUAL 2)
+        log_trace(dynamic_call "${_fun}(\"${ARGV1}\" \"${ARGV2}\")")
+elseif (${ARGC} EQUAL 3)
+${_fun}(\"${ARGV1}\" \"${ARGV2}\")
+elseif (${ARGC} EQUAL 4)
+${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\")
+elseif (${ARGC} EQUAL 5)
+${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\")
+else()
+message(FATAL_ERROR \"todo\")
+endif()
     cmake_language(EVAL CODE "
     if (${ARGC} EQUAL 1)
         ${_fun}()

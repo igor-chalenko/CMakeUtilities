@@ -67,9 +67,9 @@ endmacro()
 # Does nothing otherwise.
 ##############################################################################
 macro(assert_ends_with str1 str2)
-    string(FIND "${str1}" "${str2}" _ind)
-    string(LENGTH ${str1} _length)
-    string(LENGTH ${str2} _substr_length)
+    string(FIND "${str1}" "${str2}" _ind REVERSE)
+    string(LENGTH "${str1}" _length)
+    string(LENGTH "${str2}" _substr_length)
     math(EXPR _diff "${_length} - ${_substr_length}")
     if (NOT ${_ind} EQUAL ${_diff})
         log_error(test "`${str1}` does not end with `${str2}`")

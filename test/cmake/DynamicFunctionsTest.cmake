@@ -28,6 +28,7 @@ file(STRINGS ${CMAKE_CURRENT_BINARY_DIR}/global_set.log _messages)
 assert_ends_with("${_messages}" "global_set(\"test\" \"a\" \"bcd\")")
 
 set(_var log_info)
+log_level(dynamic_call TRACE)
 log_to_file(dynamic_call dynamic_call.log)
 dynamic_call(${_var} dynamic_call "cool message")
 file(STRINGS ${CMAKE_CURRENT_BINARY_DIR}/dynamic_call.log _messages)
