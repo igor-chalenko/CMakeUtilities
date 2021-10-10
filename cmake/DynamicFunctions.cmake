@@ -1,3 +1,10 @@
+##############################################################################
+# Copyright (c) 2020 Igor Chalenko
+# Distributed under the MIT license.
+# See accompanying file LICENSE.md.md or copy at
+# https://opensource.org/licenses/MIT
+##############################################################################
+
 cmake_policy(SET CMP0054 NEW)
 
 macro(parameter_to_function_prefix_0 _fun _prefix)
@@ -9,7 +16,6 @@ macro(parameter_to_function_prefix_1 _fun _prefix _arg1)
 endmacro()
 
 macro(parameter_to_function_prefix_2 _fun _prefix _arg1 _arg2)
-    message(STATUS "[parameter_to_function_prefix_2] ${_prefix} \"${_arg1}\" \"${_arg2}")
     cmake_language(EVAL CODE "${_fun}(${_prefix} \"${_arg1}\" \"${_arg2}\")")
 endmacro()
 
@@ -184,4 +190,56 @@ endmacro()
 ")
     endforeach()
 endfunction()
+
+##############################################################################
+#.rst:
+# .. cmake:command:: dynamic_call
+#
+# .. code-block:: cmake
+#
+#    dynamic_call(<function> <argument list>)
+#
+# Calls the given function with the given arguments. For example:
+#
+# .. code-block:: cmake
+#
+#    log_level(dynamic_call TRACE)
+#    log_to_file(dynamic_call dynamic_call.log)
+#    dynamic_call(${function_name} ${ARGN})
+#    # will append 'global_set(a bcd)' to 'global_set.log'
+#    # before calling 'global_set'
+#    _trace_global_set(a bcd)
+#
+##############################################################################
+macro(dynamic_call _fun)
+    if (${ARGC} EQUAL 1)
+        log_trace(dynamic_call "${_fun}()")
+    elseif (${ARGC} EQUAL 2)
+        log_trace(dynamic_call "${_fun}(\"${ARGV1}\")")
+    elseif (${ARGC} EQUAL 3)
+        log_trace(dynamic_call "${_fun}(\"${ARGV1}\" \"${ARGV2}\")")
+    elseif (${ARGC} EQUAL 4)
+        log_trace(dynamic_call "${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\")")
+    elseif (${ARGC} EQUAL 5)
+        log_trace(dynamic_call "${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\")")
+    else()
+        message(FATAL_ERROR \"todo\")
+    endif()
+
+    cmake_language(EVAL CODE "
+    if (${ARGC} EQUAL 1)
+        ${_fun}()
+    elseif (${ARGC} EQUAL 2)
+        ${_fun}(\"${ARGV1}\")
+    elseif (${ARGC} EQUAL 3)
+        ${_fun}(\"${ARGV1}\" \"${ARGV2}\")
+    elseif (${ARGC} EQUAL 4)
+        ${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\")
+    elseif (${ARGC} EQUAL 5)
+        ${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\")
+    else()
+        message(FATAL_ERROR \"todo\")
+    endif()
+")
+endmacro()
 
