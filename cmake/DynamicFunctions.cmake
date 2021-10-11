@@ -7,52 +7,38 @@
 
 cmake_policy(SET CMP0054 NEW)
 
-macro(parameter_to_function_prefix_0 _fun _prefix)
-    cmake_language(EVAL CODE "${_fun}(${_prefix})")
-endmacro()
+##############################################################################
+# These inspiring macros are a workaround for the CMake empty argument
+# forwarding problem
+# see https://crascit.com/2019/01/29/forwarding-command-arguments-in-cmake/
+##############################################################################
 
-macro(parameter_to_function_prefix_1 _fun _prefix _arg1)
-    cmake_language(EVAL CODE "${_fun}(${_prefix} \"${_arg1}\")")
-endmacro()
-
-macro(parameter_to_function_prefix_2 _fun _prefix _arg1 _arg2)
-    cmake_language(EVAL CODE "${_fun}(${_prefix} \"${_arg1}\" \"${_arg2}\")")
-endmacro()
-
-macro(parameter_to_function_prefix_3 _fun _prefix _arg1 _arg2 _arg3)
-    cmake_language(EVAL CODE "${_fun}(${_prefix} \"${_arg1}\" \"${_arg2}\" \"${_arg3}\")")
-endmacro()
-
-macro(parameter_to_function_prefix_4 _fun _prefix _arg1 _arg2 _arg3 _arg4)
-    cmake_language(EVAL CODE "${_fun}(${_prefix} \"${_arg1}\" \"${_arg2}\" \"${_arg3}\" \"${_arg4}\")")
-endmacro()
-
-macro(parameter_to_function_prefix_4 _fun _prefix _arg1 _arg2 _arg3 _arg4 _arg5)
-    cmake_language(EVAL CODE "${_fun}(${_prefix} \"${_arg1}\" \"${_arg2}\" \"${_arg3}\" \"${_arg4}\" \"${_arg5}\")")
-endmacro()
-
-macro(trace_functions_0 _fun)
+macro(var_arg_call_0 _fun)
     cmake_language(EVAL CODE "${_fun}()")
 endmacro()
 
-macro(trace_functions_1 _fun _arg1)
+macro(var_arg_call_1 _fun _arg1)
     cmake_language(EVAL CODE "${_fun}(\"${_arg1}\")")
 endmacro()
 
-macro(trace_functions_2 _fun _arg1 _arg2)
+macro(var_arg_call_2 _fun _arg1 _arg2)
     cmake_language(EVAL CODE "${_fun}(\"${_arg1}\" \"${_arg2}\")")
 endmacro()
 
-macro(trace_functions_3 _fun _arg1 _arg2 _arg3)
+macro(var_arg_call_3 _fun _arg1 _arg2 _arg3)
     cmake_language(EVAL CODE "${_fun}(\"${_arg1}\" \"${_arg2}\" \"${_arg3}\")")
 endmacro()
 
-macro(trace_functions_4 _fun _arg1 _arg2 _arg3 _arg4)
+macro(var_arg_call_4 _fun _arg1 _arg2 _arg3 _arg4)
     cmake_language(EVAL CODE "${_fun}(\"${_arg1}\" \"${_arg2}\" \"${_arg3}\" \"${_arg4}\")")
 endmacro()
 
-macro(trace_functions_4 _fun _arg1 _arg2 _arg3 _arg4 _arg5)
+macro(var_arg_call_4 _fun _arg1 _arg2 _arg3 _arg4 _arg5)
     cmake_language(EVAL CODE "${_fun}(\"${_arg1}\" \"${_arg2}\" \"${_arg3}\" \"${_arg4}\" \"${_arg5}\")")
+endmacro()
+
+macro(var_arg_call_4 _fun _arg1 _arg2 _arg3 _arg4 _arg5 _arg6)
+    cmake_language(EVAL CODE "${_fun}(\"${_arg1}\" \"${_arg2}\" \"${_arg3}\" \"${_arg4}\" \"${_arg5}\" \"${_arg6}\")")
 endmacro()
 
 ##############################################################################
@@ -75,28 +61,28 @@ endmacro()
 ##############################################################################
 function(parameter_to_function_prefix _prefix)
     foreach(_fun ${ARGN})
-        log_debug(parameter_to_function_prefix "inject ${_prefix}_${_fun}")
+        log_trace(parameter_to_function_prefix "inject ${_prefix}_${_fun}")
         cmake_language(EVAL CODE "
 macro(${_prefix}_${_fun})
     if (\${ARGC} EQUAL 0)
-        parameter_to_function_prefix_0(\"${_fun}\" \"${_prefix}\")
+        var_arg_call_1(\"${_fun}\" \"${_prefix}\")
     elseif (\${ARGC} EQUAL 1)
-        parameter_to_function_prefix_1(\"${_fun}\" \"${_prefix}\" \"\${ARGV0}\")
+        var_arg_call_2(\"${_fun}\" \"${_prefix}\" \"\${ARGV0}\")
     elseif (\${ARGC} EQUAL 2)
-        parameter_to_function_prefix_2(
+        var_arg_call_3(
             \"${_fun}\"
             \"${_prefix}\"
             \"\${ARGV0}\"
             \"\${ARGV1}\")
     elseif (\${ARGC} EQUAL 3)
-        parameter_to_function_prefix_3(
+        var_arg_call_4(
             \"${_fun}\"
             \"${_prefix}\"
             \"\${ARGV0}\"
             \"\${ARGV1}\"
             \"\${ARGV2}\")
     elseif (\${ARGC} EQUAL 4)
-        parameter_to_function_prefix_4(
+        var_arg_call_5(
             \"${_fun}\"
             \"${_prefix}\"
             \"\${ARGV0}\"
@@ -104,7 +90,7 @@ macro(${_prefix}_${_fun})
             \"\${ARGV2}\"
             \"\${ARGV3}\")
     elseif (\${ARGC} EQUAL 5)
-        parameter_to_function_prefix_5(
+        var_arg_call_6(
             \"${_fun}\"
             \"${_prefix}\"
             \"\${ARGV0}\"
@@ -144,7 +130,7 @@ endfunction()
 ##############################################################################
 function(trace_functions)
     foreach(_fun ${ARGN})
-        log_debug(trace_functions "inject _trace_${_fun}")
+        log_trace(trace_functions "inject _trace_${_fun}")
         cmake_language(EVAL CODE "
 macro(_trace_${_fun})
     set(_args \"\")
@@ -154,35 +140,44 @@ macro(_trace_${_fun})
     string(SUBSTRING \"\${_args}\" 1 -1 _args)
     log_trace(${_fun} \"${_fun}(\${_args})\")
     if (\${ARGC} EQUAL 0)
-        trace_functions_0(\"${_fun}\")
+        var_arg_call_0(\"${_fun}\")
     elseif (\${ARGC} EQUAL 1)
-        trace_functions_1(\"${_fun}\" \"\${ARGV0}\")
+        var_arg_call_1(\"${_fun}\" \"\${ARGV0}\")
     elseif (\${ARGC} EQUAL 2)
-        trace_functions_2(
+        var_arg_call_2(
             \"${_fun}\"
             \"\${ARGV0}\"
             \"\${ARGV1}\")
     elseif (\${ARGC} EQUAL 3)
-        trace_functions_3(
+        var_arg_call_3(
             \"${_fun}\"
             \"\${ARGV0}\"
             \"\${ARGV1}\"
             \"\${ARGV2}\")
     elseif (\${ARGC} EQUAL 4)
-        trace_functions_4(
+        var_arg_call_4(
             \"${_fun}\"
             \"\${ARGV0}\"
             \"\${ARGV1}\"
             \"\${ARGV2}\"
             \"\${ARGV3}\")
     elseif (\${ARGC} EQUAL 5)
-        trace_functions_5(
+        var_arg_call_5(
             \"${_fun}\"
             \"\${ARGV0}\"
             \"\${ARGV1}\"
             \"\${ARGV2}\"
             \"\${ARGV3}\"
             \"\${ARGV4}\")
+    elseif (\${ARGC} EQUAL 6)
+        var_arg_call_6(
+            \"${_fun}\"
+            \"\${ARGV0}\"
+            \"\${ARGV1}\"
+            \"\${ARGV2}\"
+            \"\${ARGV3}\"
+            \"\${ARGV4}\"
+            \"\${ARGV5}\")
     else()
         message(FATAL_ERROR \"todo\")
     endif()
@@ -237,6 +232,8 @@ macro(dynamic_call _fun)
         ${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\")
     elseif (${ARGC} EQUAL 5)
         ${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\")
+    elseif (${ARGC} EQUAL 6)
+        ${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\" \"${ARGV5}\")
     else()
         message(FATAL_ERROR \"todo\")
     endif()
