@@ -33,11 +33,11 @@ macro(var_arg_call_4 _fun _arg1 _arg2 _arg3 _arg4)
     cmake_language(EVAL CODE "${_fun}(\"${_arg1}\" \"${_arg2}\" \"${_arg3}\" \"${_arg4}\")")
 endmacro()
 
-macro(var_arg_call_4 _fun _arg1 _arg2 _arg3 _arg4 _arg5)
+macro(var_arg_call_5 _fun _arg1 _arg2 _arg3 _arg4 _arg5)
     cmake_language(EVAL CODE "${_fun}(\"${_arg1}\" \"${_arg2}\" \"${_arg3}\" \"${_arg4}\" \"${_arg5}\")")
 endmacro()
 
-macro(var_arg_call_4 _fun _arg1 _arg2 _arg3 _arg4 _arg5 _arg6)
+macro(var_arg_call_6 _fun _arg1 _arg2 _arg3 _arg4 _arg5 _arg6)
     cmake_language(EVAL CODE "${_fun}(\"${_arg1}\" \"${_arg2}\" \"${_arg3}\" \"${_arg4}\" \"${_arg5}\" \"${_arg6}\")")
 endmacro()
 
