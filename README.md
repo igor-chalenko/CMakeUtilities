@@ -1,5 +1,7 @@
 # cmake-utilities
 
+[![Build Status](https://app.travis-ci.com/igor-chalenko/cmake-utilities.svg?branch=master)](https://app.travis-ci.com/igor-chalenko/cmake-utilities)
+
 What is it
 ----------
 
