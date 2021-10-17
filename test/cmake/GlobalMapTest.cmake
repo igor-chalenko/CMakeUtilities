@@ -10,6 +10,10 @@ global_set(prefix a c)
 global_get(prefix a _var)
 assert_same(${_var} c)
 
+# get a non-existing property
+global_get(prefix non_existing _var)
+assert_empty("${_var}")
+
 global_append(prefix a d)
 global_get(prefix a _var)
 assert_same("${_var}" "c;d")

@@ -128,7 +128,7 @@ function(global_append map_name property value)
     global_index(${map_name} _index)
 
     global_get(${map_name} ${property} _current_value)
-    if ("${_current_value}" STREQUAL "")
+    if (_current_value STREQUAL "")
         global_set(${map_name} ${property} "${value}")
     else()
         list(APPEND _current_value "${value}")
@@ -227,11 +227,11 @@ endfunction()
 # See the example for :ref:`global_set<global_set_reference_label>`.
 ##############################################################################
 function(global_get map_name property out_var)
-    get_property(value GLOBAL PROPERTY ${map_name}${property})
-    if ("${value}" STREQUAL "value-NOTFOUND")
+    get_property(_value GLOBAL PROPERTY ${map_name}${property})
+    if (_value STREQUAL "_value-NOTFOUND")
         set(${out_var} "" PARENT_SCOPE)
     else ()
-        set(${out_var} "${value}" PARENT_SCOPE)
+        set(${out_var} "${_value}" PARENT_SCOPE)
     endif ()
 endfunction()
 

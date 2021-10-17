@@ -28,7 +28,7 @@ function(log_message _level _context _message)
     global_get(log.context.${_context}. file _file_name)
 
     if (_current_level STREQUAL "")
-        list(FIND _levels INFO _current_level)
+        list(FIND _levels WARN _current_level)
     endif()
 
     _log_format_message(_formatted_message "${_message}" ${ARGN})
