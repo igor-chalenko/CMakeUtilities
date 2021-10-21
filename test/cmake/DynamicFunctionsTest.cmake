@@ -1,8 +1,10 @@
-set(_project_source_dir "${CMAKE_CURRENT_BINARY_DIR}/../../")
+include(${cmake.utilities.path}/Dependency.cmake)
 
-include(${_project_source_dir}/cmake/Testing.cmake)
-include(${_project_source_dir}/cmake/Logging.cmake)
-include(${_project_source_dir}/cmake/DynamicFunctions.cmake)
+add_to_registry(self "${cmake.utilities.path}")
+
+import(self::Testing)
+import(self::Logging)
+import(self::DynamicFunctions)
 
 function(test_function_1 param1)
     assert_same(${param1} "parameter #1")

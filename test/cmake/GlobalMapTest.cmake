@@ -1,7 +1,8 @@
-set(_project_source_dir "${CMAKE_CURRENT_BINARY_DIR}/../../")
+include(${cmake.utilities.path}/Dependency.cmake)
 
-include(${_project_source_dir}/cmake/Testing.cmake)
-include(${_project_source_dir}/cmake/GlobalMap.cmake)
+add_to_registry(self "${cmake.utilities.path}")
+
+import(self::Testing)
 
 global_set(prefix a b)
 global_get(prefix a _var)

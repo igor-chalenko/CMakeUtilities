@@ -36,4 +36,11 @@ if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
     install(DIRECTORY "cmake/"
             DESTINATION ${_DESTINATION}
             PATTERN cmake/InstallBasicPackageFiles.cmake EXCLUDE)
+else()
+    include(${PROJECT_SOURCE_DIR}/cmake/Dependency.cmake)
+    include(${PROJECT_SOURCE_DIR}/cmake/Logging.cmake)
+    include(${PROJECT_SOURCE_DIR}/cmake/Testing.cmake)
+    include(${PROJECT_SOURCE_DIR}/cmake/DynamicFunctions.cmake)
+
+    add_to_registry(cmake-utilities "${PROJECT_SOURCE_DIR}/cmake")
 endif()
