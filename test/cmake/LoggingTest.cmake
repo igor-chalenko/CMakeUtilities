@@ -1,7 +1,9 @@
-set(_project_source_dir "${CMAKE_CURRENT_BINARY_DIR}/../../")
+include(${cmake.utilities.path}/Dependency.cmake)
 
-include(${_project_source_dir}/cmake/Testing.cmake)
-include(${_project_source_dir}/cmake/Logging.cmake)
+add_to_registry(self "${cmake.utilities.path}")
+
+import(self::Testing)
+import(self::Logging)
 
 function(test_log_functions)
     log_info(test "Path {1} will be changed to {2}" examples "${PROJECT_SOURCE_DIR}/examples")
