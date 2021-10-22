@@ -40,7 +40,7 @@ if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
     # slash at the end removes `cmake` from the directory structure
     install(DIRECTORY "cmake/"
             DESTINATION ${_DESTINATION}
-            PATTERN cmake/3rd-party/InstallBasicPackageFiles.cmake EXCLUDE)
+            PATTERN cmake/3rd-party EXCLUDE)
 else()
     self_register()
 endif()
