@@ -8,8 +8,13 @@
 cmake_minimum_required(VERSION 3.18)
 project(cmake-utilities VERSION 0.1)
 
+function(self_register)
+    include(${PROJECT_SOURCE_DIR}/cmake/Dependency.cmake)
+    add_to_registry(cmake-utilities "${PROJECT_SOURCE_DIR}/cmake")
+endfunction()
+
 if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
-    include(cmake/InstallBasicPackageFiles.cmake)
+    include(cmake/3rd-party/InstallBasicPackageFiles.cmake)
 
     enable_testing()
 
@@ -35,12 +40,8 @@ if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
     # slash at the end removes `cmake` from the directory structure
     install(DIRECTORY "cmake/"
             DESTINATION ${_DESTINATION}
-            PATTERN cmake/InstallBasicPackageFiles.cmake EXCLUDE)
+            PATTERN cmake/3rd-party/InstallBasicPackageFiles.cmake EXCLUDE)
 else()
-    include(${PROJECT_SOURCE_DIR}/cmake/Dependency.cmake)
-    include(${PROJECT_SOURCE_DIR}/cmake/Logging.cmake)
-    include(${PROJECT_SOURCE_DIR}/cmake/Testing.cmake)
-    include(${PROJECT_SOURCE_DIR}/cmake/DynamicFunctions.cmake)
-
-    add_to_registry(cmake-utilities "${PROJECT_SOURCE_DIR}/cmake")
+    self_register()
 endif()
+

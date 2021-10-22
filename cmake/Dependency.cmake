@@ -1,0 +1,25 @@
+get_filename_component(_current_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
+include(${_current_dir}/GlobalMap.cmake)
+
+macro(obtain _name)
+    find_package(${_name} ${ARGN})
+endmacro()
+
+macro(add_to_registry _module _path)
+    global_set(module.path. ${_module} "${_path}")
+endmacro()
+
+macro(import _module)
+    include(${_current_dir}/GlobalMap.cmake)
+
+    if (${_module} MATCHES "(.+)::(.+)")
+        global_get(module.path. ${CMAKE_MATCH_1} _path)
+        if (_path)
+            include(${_path}/${CMAKE_MATCH_2}.cmake)
+        else()
+            obtain(${CMAKE_MATCH_1} ${ARGN})
+        endif()
+    else()
+        message(FATAL_ERROR "Use package::module form for importing")
+    endif()
+endmacro()
