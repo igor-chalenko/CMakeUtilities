@@ -1,3 +1,5 @@
+cmake_minimum_required(VERSION 3.18)
+
 include(${cmake.utilities.path}/Dependency.cmake)
 
 add_to_registry(self "${cmake.utilities.path}")
