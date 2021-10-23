@@ -29,7 +29,6 @@ function(log_message _level _category _message)
 
     if (_current_level STREQUAL "")
         _log_parent_level(${_category} _current_level)
-        message(STATUS "${_message}; _current_level = ${_current_level}; _ind = ${_ind}")
     endif()
     if (_file_name STREQUAL "")
         _log_parent_destination(${_category} _file_name)
