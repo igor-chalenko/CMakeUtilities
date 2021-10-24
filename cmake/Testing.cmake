@@ -36,6 +36,10 @@ macro(assert_empty value)
     endif()
 endmacro()
 
+function(assert_fail _message)
+    log_fatal(test "${_message}")
+endfunction()
+
 ##############################################################################
 #.rst:
 #
