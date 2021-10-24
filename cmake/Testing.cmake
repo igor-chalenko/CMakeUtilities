@@ -37,7 +37,7 @@ macro(assert_empty value)
 endmacro()
 
 function(assert_fail _message)
-    log_fatal(test "${_message}")
+    message(FATAL_ERROR "${_message}")
 endfunction()
 
 ##############################################################################
