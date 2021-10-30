@@ -137,6 +137,7 @@ function(dynamic_call_test)
     dynamic_call(test_function_x "" "param2")
 endfunction()
 
+
 parameter_to_function_prefix_test()
 trace_functions(test_function_1 test_function_2 test_function_3 test_function_4
         test_function_11 test_function_12 test_function_x)
