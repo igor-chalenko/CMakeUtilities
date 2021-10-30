@@ -30,6 +30,11 @@ function(test_function_4 param1 param2 param3 param4)
     assert_same(${param4} "parameter #4")
 endfunction()
 
+function(test_function_x param1 param2)
+    assert_empty("${param1}")
+    assert_same(${param2} "param2")
+endfunction()
+
 function(parameter_to_function_prefix_test)
     parameter_to_function_prefix(doxygen
             global_set
@@ -56,7 +61,6 @@ function(trace_functions_test)
     file(STRINGS ${CMAKE_CURRENT_BINARY_DIR}/global_set.log _messages)
     assert_ends_with("${_messages}" "global_set(\"test\" \"a\" \"bcd\")")
 
-    trace_functions(test_function_1 test_function_2 test_function_3 test_function_4)
     log_level(test_function_1 TRACE)
     log_to_file(test_function_1 test_function_1.log)
     log_level(test_function_2 TRACE)
@@ -93,8 +97,10 @@ function(dynamic_call_test)
     dynamic_call(test_function_2 "parameter #1" "parameter #2")
     dynamic_call(test_function_3 "parameter #1" "parameter #2" "parameter #3")
     dynamic_call(test_function_4 "parameter #1" "parameter #2" "parameter #3" "parameter #4")
+    dynamic_call(test_function_x "" "param2")
 endfunction()
 
 parameter_to_function_prefix_test()
+trace_functions(test_function_1 test_function_2 test_function_3 test_function_4 test_function_x)
 trace_functions_test()
 dynamic_call_test()

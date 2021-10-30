@@ -5,8 +5,6 @@
 # https://opensource.org/licenses/MIT
 ##############################################################################
 
-cmake_policy(SET CMP0054 NEW)
-
 ##############################################################################
 # These inspiring macros are a workaround for the CMake empty argument
 # forwarding problem
@@ -61,46 +59,15 @@ endmacro()
 ##############################################################################
 function(parameter_to_function_prefix _prefix)
     foreach(_fun ${ARGN})
-        log_trace(parameter_to_function_prefix "inject ${_prefix}_${_fun}")
+        log_debug(parameter_to_function_prefix "inject ${_prefix}_${_fun}")
         cmake_language(EVAL CODE "
 macro(${_prefix}_${_fun})
-    if (\${ARGC} EQUAL 0)
-        var_arg_call_1(\"${_fun}\" \"${_prefix}\")
-    elseif (\${ARGC} EQUAL 1)
-        var_arg_call_2(\"${_fun}\" \"${_prefix}\" \"\${ARGV0}\")
-    elseif (\${ARGC} EQUAL 2)
-        var_arg_call_3(
-            \"${_fun}\"
-            \"${_prefix}\"
-            \"\${ARGV0}\"
-            \"\${ARGV1}\")
-    elseif (\${ARGC} EQUAL 3)
-        var_arg_call_4(
-            \"${_fun}\"
-            \"${_prefix}\"
-            \"\${ARGV0}\"
-            \"\${ARGV1}\"
-            \"\${ARGV2}\")
-    elseif (\${ARGC} EQUAL 4)
-        var_arg_call_5(
-            \"${_fun}\"
-            \"${_prefix}\"
-            \"\${ARGV0}\"
-            \"\${ARGV1}\"
-            \"\${ARGV2}\"
-            \"\${ARGV3}\")
-    elseif (\${ARGC} EQUAL 5)
-        var_arg_call_6(
-            \"${_fun}\"
-            \"${_prefix}\"
-            \"\${ARGV0}\"
-            \"\${ARGV1}\"
-            \"\${ARGV2}\"
-            \"\${ARGV3}\"
-            \"\${ARGV4}\")
-    else()
-        message(FATAL_ERROR \"todo\")
-    endif()
+    _materialize_argn(_argn \"\${ARGN}\")
+    math(EXPR _arg_count \"\${ARGC} + 1\")
+    log_trace(parameter_to_function_prefix \"ARGN = \${ARGN}\")
+    log_trace(parameter_to_function_prefix \"argn = \${_argn}\")
+    log_trace(parameter_to_function_prefix \"calling var_arg_call_\${_arg_count}(${_fun} ${_prefix} \${_argn})\")
+    cmake_language(EVAL CODE \"var_arg_call_\${_arg_count}(${_fun} ${_prefix} \${_argn})\")
 endmacro()
 ")
     endforeach()
@@ -207,58 +174,21 @@ endfunction()
 #
 ##############################################################################
 macro(dynamic_call _fun)
-    if (${ARGC} EQUAL 1)
-        log_trace(dynamic_call "${_fun}()")
-    elseif (${ARGC} EQUAL 2)
-        log_trace(dynamic_call "${_fun}(\"${ARGV1}\")")
-    elseif (${ARGC} EQUAL 3)
-        log_trace(dynamic_call "${_fun}(\"${ARGV1}\" \"${ARGV2}\")")
-    elseif (${ARGC} EQUAL 4)
-        log_trace(dynamic_call "${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\")")
-    elseif (${ARGC} EQUAL 5)
-        log_trace(dynamic_call "${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\")")
-    elseif (${ARGC} EQUAL 6)
-        log_trace(dynamic_call "${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\" \"${ARGV5}\")")
-    elseif (${ARGC} EQUAL 7)
-        log_trace(dynamic_call "${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\" \"${ARGV5}\" \"${ARGV6}\")")
-    elseif (${ARGC} EQUAL 8)
-        log_trace(dynamic_call "${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\" \"${ARGV5}\" \"${ARGV6}\" \"${ARGV7}\")")
-    elseif (${ARGC} EQUAL 9)
-        log_trace(dynamic_call "${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\" \"${ARGV5}\" \"${ARGV6}\" \"${ARGV7}\" \"${ARGV8}\")")
-    elseif (${ARGC} EQUAL 10)
-        log_trace(dynamic_call "${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\" \"${ARGV5}\" \"${ARGV6}\" \"${ARGV7}\" \"${ARGV8}\" \"${ARGV9}\")")
-    elseif (${ARGC} EQUAL 11)
-        log_trace(dynamic_call "${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\" \"${ARGV5}\" \"${ARGV6}\" \"${ARGV7}\" \"${ARGV8}\" \"${ARGV9}\" \"${ARGV10}\")")
-    else()
-        message(FATAL_ERROR \"todo\")
-    endif()
-
-    cmake_language(EVAL CODE "
-    if (${ARGC} EQUAL 1)
-        ${_fun}()
-    elseif (${ARGC} EQUAL 2)
-        ${_fun}(\"${ARGV1}\")
-    elseif (${ARGC} EQUAL 3)
-        ${_fun}(\"${ARGV1}\" \"${ARGV2}\")
-    elseif (${ARGC} EQUAL 4)
-        ${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\")
-    elseif (${ARGC} EQUAL 5)
-        ${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\")
-    elseif (${ARGC} EQUAL 6)
-        ${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\" \"${ARGV5}\")
-    elseif (${ARGC} EQUAL 7)
-        ${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\" \"${ARGV5}\" \"${ARGV6}\")
-    elseif (${ARGC} EQUAL 8)
-        ${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\" \"${ARGV5}\" \"${ARGV6}\" \"${ARGV7}\")
-    elseif (${ARGC} EQUAL 9)
-        ${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\" \"${ARGV5}\" \"${ARGV6}\" \"${ARGV7}\" \"${ARGV8}\")
-    elseif (${ARGC} EQUAL 10)
-        ${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\" \"${ARGV5}\" \"${ARGV6}\" \"${ARGV7}\" \"${ARGV8}\" \"${ARGV9}\")
-    elseif (${ARGC} EQUAL 11)
-        ${_fun}(\"${ARGV1}\" \"${ARGV2}\" \"${ARGV3}\" \"${ARGV4}\" \"${ARGV5}\" \"${ARGV6}\" \"${ARGV7}\" \"${ARGV8}\" \"${ARGV9}\" \"${ARGV10}\")
-    else()
-        message(FATAL_ERROR \"todo\")
-    endif()
-")
+    unset(_code)
+    set(_ind 0)
+    math(EXPR _var_arg_count "${ARGC} - 1")
+    _materialize_argn(_code "${ARGN}")
+    log_trace(dynamic_call "${_fun}(${_code})")
+    cmake_language(EVAL CODE "var_arg_call_${_var_arg_count}(${_fun} ${_code})")
 endmacro()
 
+function(_materialize_argn _out_var x)
+    set(_ind 1)
+    unset(_code)
+    foreach(_arg IN LISTS x)
+        string(REPLACE "\"" "\\\"" _arg "${_arg}")
+        string(APPEND _code "\"${_arg}\" ")
+    endforeach()
+
+    set(${_out_var} "${_code}" PARENT_SCOPE)
+endfunction()
