@@ -30,6 +30,35 @@ function(test_function_4 param1 param2 param3 param4)
     assert_same(${param4} "parameter #4")
 endfunction()
 
+function(test_function_11 param1 param2 param3 param4 param5 param6 param7 param8 param9 param10 param11)
+    assert_same(${param1} "parameter #1")
+    assert_same(${param2} "parameter #2")
+    assert_same(${param3} "parameter #3")
+    assert_same(${param4} "parameter #4")
+    assert_same(${param5} "parameter #5")
+    assert_same(${param6} "parameter #6")
+    assert_same(${param7} "parameter #7")
+    assert_same(${param8} "parameter #8")
+    assert_same(${param9} "parameter #9")
+    assert_same(${param10} "parameter #10")
+    assert_same(${param11} "parameter #11")
+endfunction()
+
+function(test_function_12 param1 param2 param3 param4 param5 param6 param7 param8 param9 param10 param11 param12)
+    assert_same(${param1} "parameter #1")
+    assert_same(${param2} "parameter #2")
+    assert_same(${param3} "parameter #3")
+    assert_same(${param4} "parameter #4")
+    assert_same(${param5} "parameter #5")
+    assert_same(${param6} "parameter #6")
+    assert_same(${param7} "parameter #7")
+    assert_same(${param8} "parameter #8")
+    assert_same(${param9} "parameter #9")
+    assert_same(${param10} "parameter #10")
+    assert_same(${param11} "parameter #11")
+    assert_same(${param12} "parameter #12")
+endfunction()
+
 function(test_function_x param1 param2)
     assert_empty("${param1}")
     assert_same(${param2} "param2")
@@ -97,10 +126,20 @@ function(dynamic_call_test)
     dynamic_call(test_function_2 "parameter #1" "parameter #2")
     dynamic_call(test_function_3 "parameter #1" "parameter #2" "parameter #3")
     dynamic_call(test_function_4 "parameter #1" "parameter #2" "parameter #3" "parameter #4")
+    dynamic_call(test_function_11 "parameter #1" "parameter #2" "parameter #3" "parameter #4"
+            "parameter #5" "parameter #6" "parameter #7" "parameter #8"
+            "parameter #9" "parameter #10" "parameter #11"
+            )
+    dynamic_call(test_function_12 "parameter #1" "parameter #2" "parameter #3" "parameter #4"
+            "parameter #5" "parameter #6" "parameter #7" "parameter #8"
+            "parameter #9" "parameter #10" "parameter #11" "parameter #12"
+            )
     dynamic_call(test_function_x "" "param2")
 endfunction()
 
+
 parameter_to_function_prefix_test()
-trace_functions(test_function_1 test_function_2 test_function_3 test_function_4 test_function_x)
+trace_functions(test_function_1 test_function_2 test_function_3 test_function_4
+        test_function_11 test_function_12 test_function_x)
 trace_functions_test()
 dynamic_call_test()

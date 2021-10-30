@@ -39,6 +39,88 @@ macro(var_arg_call_6 _fun _arg1 _arg2 _arg3 _arg4 _arg5 _arg6)
     cmake_language(EVAL CODE "${_fun}(\"${_arg1}\" \"${_arg2}\" \"${_arg3}\" \"${_arg4}\" \"${_arg5}\" \"${_arg6}\")")
 endmacro()
 
+macro(var_arg_call_7 _fun _arg1 _arg2 _arg3 _arg4 _arg5 _arg6 _arg7)
+    cmake_language(EVAL CODE "${_fun}(\"${_arg1}\" \"${_arg2}\" \"${_arg3}\"
+                                      \"${_arg4}\" \"${_arg5}\" \"${_arg6}\"
+                                      \"${_arg7}\")")
+endmacro()
+
+macro(var_arg_call_8 _fun _arg1 _arg2 _arg3 _arg4 _arg5 _arg6 _arg7 _arg8)
+    cmake_language(EVAL CODE "${_fun}(\"${_arg1}\" \"${_arg2}\" \"${_arg3}\"
+                                      \"${_arg4}\" \"${_arg5}\" \"${_arg6}\"
+                                      \"${_arg7}\" \"${_arg8}\")")
+endmacro()
+
+macro(var_arg_call_9
+        _fun
+        _arg1
+        _arg2
+        _arg3
+        _arg4
+        _arg5
+        _arg6
+        _arg7
+        _arg8
+        _arg9)
+    cmake_language(EVAL CODE "${_fun}(\"${_arg1}\" \"${_arg2}\" \"${_arg3}\"
+                                      \"${_arg4}\" \"${_arg5}\" \"${_arg6}\"
+                                      \"${_arg7}\" \"${_arg8}\" \"${_arg9}\")")
+endmacro()
+
+macro(var_arg_call_10 _fun
+        _arg1
+        _arg2
+        _arg3
+        _arg4
+        _arg5
+        _arg6
+        _arg7
+        _arg8
+        _arg9
+        _arg10)
+    cmake_language(EVAL CODE "${_fun}(\"${_arg1}\" \"${_arg2}\" \"${_arg3}\"
+                                      \"${_arg4}\" \"${_arg5}\" \"${_arg6}\"
+                                      \"${_arg7}\" \"${_arg8}\" \"${_arg9}\"
+                                      \"${_arg10}\")")
+endmacro()
+
+macro(var_arg_call_11 _fun
+        _arg1
+        _arg2
+        _arg3
+        _arg4
+        _arg5
+        _arg6
+        _arg7
+        _arg8
+        _arg9
+        _arg10
+        _arg11)
+    cmake_language(EVAL CODE "${_fun}(\"${_arg1}\" \"${_arg2}\" \"${_arg3}\"
+                                      \"${_arg4}\" \"${_arg5}\" \"${_arg6}\"
+                                      \"${_arg7}\" \"${_arg8}\" \"${_arg9}\"
+                                      \"${_arg10}\" \"${_arg11}\")")
+endmacro()
+
+macro(var_arg_call_12 _fun
+        _arg1
+        _arg2
+        _arg3
+        _arg4
+        _arg5
+        _arg6
+        _arg7
+        _arg8
+        _arg9
+        _arg10
+        _arg11
+        _arg12)
+    cmake_language(EVAL CODE "${_fun}(\"${_arg1}\" \"${_arg2}\" \"${_arg3}\"
+                                      \"${_arg4}\" \"${_arg5}\" \"${_arg6}\"
+                                      \"${_arg7}\" \"${_arg8}\" \"${_arg9}\"
+                                      \"${_arg10}\" \"${_arg11}\" \"${_arg12}\")")
+endmacro()
+
 ##############################################################################
 #.rst:
 # .. cmake:command:: parameter_to_function_prefix
