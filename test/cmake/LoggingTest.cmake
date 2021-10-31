@@ -13,6 +13,10 @@ function(log_functions_test)
     log_debug(test "Path {1} will be changed to {2}" examples "${cmake.utilities.path}/examples")
 endfunction()
 
+function(log_fatal_test)
+    log_fatal(test "where is my message?")
+endfunction()
+
 function(log_parent_level_test)
     log_level(test1 INFO)
     log_to_file(test1 test1.log)
@@ -36,6 +40,7 @@ function(log_to_file_test)
     assert_ends_with("${_messages}" "This is a warning with a parameter 'x'")
 endfunction()
 
+#log_fatal_test()
 log_functions_test()
 log_to_file_test()
 log_parent_level_test()
