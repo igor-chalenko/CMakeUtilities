@@ -6,7 +6,7 @@
 ##############################################################################
 
 cmake_minimum_required(VERSION 3.18)
-project(cmake-utilities VERSION 0.1)
+project(CMakeUtilities VERSION 0.1)
 
 function(self_register)
     include(${PROJECT_SOURCE_DIR}/cmake/Dependency.cmake)
@@ -33,7 +33,6 @@ if (PROJECT_NAME STREQUAL CMAKE_PROJECT_NAME)
             COMPATIBILITY AnyNewerVersion
             ARCH_INDEPENDENT
             NO_EXPORT
-            LOWERCASE_FILENAMES
             EXTRA_PATH_VARS_SUFFIX MODULE_DIR
             NO_CHECK_REQUIRED_COMPONENTS_MACRO)
 

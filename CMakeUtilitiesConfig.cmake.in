@@ -7,7 +7,7 @@ list(APPEND CMAKE_MODULE_PATH "${CMAKE_UTILITIES_CMAKE_MODULE_PATH}")
 
 function(self_register)
     include(${cmake_utilities_dir}/Dependency.cmake)
-    add_to_registry(cmake-utilities "${cmake_utilities_dir}")
+    add_to_registry(CMakeUtilities "${cmake_utilities_dir}")
 endfunction()
 
 self_register()
