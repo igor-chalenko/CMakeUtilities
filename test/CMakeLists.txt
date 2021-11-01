@@ -1,4 +1,4 @@
-project(cmake-utilities-test VERSION 0.1)
+project(CMakeUtilitiesTest VERSION 0.1)
 
 include(${PROJECT_SOURCE_DIR}/../cmake/Dependency.cmake)
 
