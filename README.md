@@ -9,7 +9,7 @@ What is it
 This is a [CMake](https://cmake.org/) package that provides functionality of 
 general interest, such as logging, test assertions, and key to value mapping.
 Read the
-[documentation](https://cmake-utilities.readthedocs.io/en/latest/index.html)
+[documentation](https://cmakeutilities.readthedocs.io/en/latest/index.html)
 at [Read the Docs](https://readthedocs.io/).
 
 Files
