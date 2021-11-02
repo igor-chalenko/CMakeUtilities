@@ -1,6 +1,6 @@
 # CMakeUtilities
 
-[![Build Status](https://app.travis-ci.com/igor-chalenko/cmake-utilities.svg?branch=master)](https://app.travis-ci.com/igor-chalenko/cmake-utilities)
+[![Build Status](https://app.travis-ci.com/igor-chalenko/CMakeUtilities.svg?branch=master)](https://app.travis-ci.com/igor-chalenko/cmake-utilities)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 What is it
