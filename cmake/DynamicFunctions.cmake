@@ -274,3 +274,105 @@ function(_materialize_argn _out_var x)
 
     set(${_out_var} "${_code}" PARENT_SCOPE)
 endfunction()
+
+##############################################################################
+#.rst:
+# .. cmake:command:: eval
+#
+# .. code-block:: cmake
+#
+#    eval(<var> = <function>(<argument>...))
+#
+# Calls the given function with the given arguments and stores the result
+# in the result variable ``var``. The function ``function`` must call one of
+# ``result_is``, ``result_expr`` to publish the result:
+#
+# .. code-block:: cmake
+#
+# function(function_with_result _param1 _param2)
+#    result_expr(${_param1} + ${_param2})
+# endfunction()
+#
+# function(function_with_result_2 _param1 _param2)
+#    result_is("${_param1}_${_param2}")
+# endfunction()
+#
+# macro(macro_with_result _param1 _param2)
+#     result_is("${_param1}_${_param2}")
+# endmacro()
+#
+# function(eval_test)
+#    eval(a = function_with_result(3 4))
+#    assert_same(${a} 7)
+#    eval(b = function_with_result_2(cmake language))
+#    assert_same(${b} cmake_language)
+#    set(_ind 2)
+#    eval(EXPR a = ${_ind} + 3)
+#    assert_same(${a} 5)
+#    eval(a = macro_with_result(1 2))
+#    assert_same(${a} 1_2)
+# endfunction()
+#
+##############################################################################
+macro(eval)
+    cmake_parse_arguments(ARG "" "" "EXPR" ${ARGN})
+    if (ARG_EXPR)
+        message(STATUS "EXPR = ${ARG_EXPR}")
+        _eval_expr(${ARG_EXPR})
+    else()
+        if ("${ARGN}" MATCHES "(.+)=(.+)")
+            set(_var_name ${CMAKE_MATCH_1})
+            #message(STATUS "_var_name = ${_var_name}")
+            string(STRIP ${_var_name} _var_name)
+            set(_function ${CMAKE_MATCH_2})
+            string(STRIP "${_function}" _function)
+            set(_RESULT_VAR ${_var_name})
+            list(GET _function 0 _function_name)
+            set(_FUNCTION_VAR ${_function_name})
+            unset(${_var_name})
+            #message(STATUS calling ${_function})
+            cmake_language(EVAL CODE ${_function})
+            #message(STATUS "${_var_name} = ${${_var_name}}")
+            #message(STATUS "_RESULT_VAR = ${_RESULT_VAR}")
+            unset(_RESULT_VAR)
+        else()
+            message(SEND_ERROR "The input ${ARGN} does not match the expected format <var> = <command>")
+        endif()
+    endif()
+endmacro()
+
+function(_eval_expr)
+    if ("${ARGN}" MATCHES "(.+)=(.+)")
+        set(_var_name ${CMAKE_MATCH_1})
+        #message(STATUS "_var_name = ${_var_name}")
+        string(STRIP ${_var_name} _var_name)
+        set(_expr ${CMAKE_MATCH_2})
+        string(STRIP "${_expr}" _expr)
+        set(_RESULT_VAR ${_var_name})
+        list(GET _expr 0 _function_name)
+        set(_FUNCTION_VAR ${_function_name})
+        result_expr(${_expr})
+        unset(_RESULT_VAR)
+    else()
+        message(SEND_ERROR "The input ${ARGN} does not match the expected format <var> = <command>")
+    endif()
+endfunction()
+
+macro(result_expr)
+    string(REPLACE ";" " " _replaced "${ARGN}")
+    math(EXPR _result "${_replaced}")
+    #message(STATUS "_result = ${_result}, result var is ${_RESULT_VAR}")
+    set(${_RESULT_VAR} ${_result} PARENT_SCOPE)
+endmacro()
+
+macro(result_is _var)
+    get_directory_property(DEFINED_MACROS MACROS)
+    list(FIND DEFINED_MACROS "${_FUNCTION_VAR}" _macro_index)
+    if(_macro_index EQUAL -1)
+        #message(STATUS "macro ${_FUNCTION_VAR} does not exist")
+        set(${_RESULT_VAR} ${_var} PARENT_SCOPE)
+    else()
+        #message(STATUS "macro ${_FUNCTION_VAR} exists")
+        set(${_RESULT_VAR} ${_var})
+    endif()
+endmacro()
