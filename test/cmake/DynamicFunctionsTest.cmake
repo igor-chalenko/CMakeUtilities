@@ -137,9 +137,33 @@ function(dynamic_call_test)
     dynamic_call(test_function_x "" "param2")
 endfunction()
 
+function(function_with_result _param1 _param2)
+    result_expr(${_param1} + ${_param2})
+endfunction()
+
+function(function_with_result_2 _param1 _param2)
+    result_is("${_param1}_${_param2}")
+endfunction()
+
+macro(macro_with_result _param1 _param2)
+    result_is("${_param1}_${_param2}")
+endmacro()
+
+function(eval_test)
+    eval(a = function_with_result(3 4))
+    assert_same(${a} 7)
+    eval(b = function_with_result_2(cmake language))
+    assert_same(${b} cmake_language)
+    set(_ind 2)
+    eval(EXPR a = ${_ind} + 3)
+    assert_same(${a} 5)
+    eval(a = macro_with_result(1 2))
+    assert_same(${a} 1_2)
+endfunction()
 
 parameter_to_function_prefix_test()
 trace_functions(test_function_1 test_function_2 test_function_3 test_function_4
         test_function_11 test_function_12 test_function_x)
 trace_functions_test()
 dynamic_call_test()
+eval_test()
