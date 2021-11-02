@@ -275,11 +275,45 @@ function(_materialize_argn _out_var x)
     set(${_out_var} "${_code}" PARENT_SCOPE)
 endfunction()
 
-# eval(a = fun_nme(b c d))
-# function(fun_name b c d)
-#   ...
-#   result_is(_some_var)
+##############################################################################
+#.rst:
+# .. cmake:command:: eval
+#
+# .. code-block:: cmake
+#
+#    eval(<var> = <function>(<argument>...))
+#
+# Calls the given function with the given arguments and stores the result
+# in the result variable ``var``. The function ``function`` must call one of
+# ``result_is``, ``result_expr`` to publish the result:
+#
+# .. code-block:: cmake
+#
+# function(function_with_result _param1 _param2)
+#    result_expr(${_param1} + ${_param2})
 # endfunction()
+#
+# function(function_with_result_2 _param1 _param2)
+#    result_is("${_param1}_${_param2}")
+# endfunction()
+#
+# macro(macro_with_result _param1 _param2)
+#     result_is("${_param1}_${_param2}")
+# endmacro()
+#
+# function(eval_test)
+#    eval(a = function_with_result(3 4))
+#    assert_same(${a} 7)
+#    eval(b = function_with_result_2(cmake language))
+#    assert_same(${b} cmake_language)
+#    set(_ind 2)
+#    eval(EXPR a = ${_ind} + 3)
+#    assert_same(${a} 5)
+#    eval(a = macro_with_result(1 2))
+#    assert_same(${a} 1_2)
+# endfunction()
+#
+##############################################################################
 macro(eval)
     cmake_parse_arguments(ARG "" "" "EXPR" ${ARGN})
     if (ARG_EXPR)
