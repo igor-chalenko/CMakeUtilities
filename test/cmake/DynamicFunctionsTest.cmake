@@ -150,7 +150,7 @@ macro(macro_with_result _param1 _param2)
 endmacro()
 
 function(eval_test)
-    eval(a = function_with_result(3 4))
+    eval("a = function_with_result(3 4)")
     assert_same(${a} 7)
     eval(b = function_with_result_2(cmake language))
     assert_same(${b} cmake_language)

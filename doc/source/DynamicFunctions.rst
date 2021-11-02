@@ -18,18 +18,19 @@ The function ``dynamic_call`` forwards given arguments to a given function
 without any changes.
 
 The function ``eval`` emulates return values for functions and macros:
-```cmake
+
+.. code-block:: cmake
+
     function(concat_function _param1 _param2)
         result_is("${_param1}_${_param2}")
     endfunction()
 
     set(_ind 2)
-    eval(EXPR a = ${_ind} + 3)
+    eval(EXPR "a = ${_ind} + 3")
     message(STATUS "a = ${a}") # prints a = 5
 
-    eval(b = concat_function(cmake language))
+    eval("b = concat_function(cmake language)")
     message(STATUS "b = ${b}") # prints b = cmake_language
-```
 
 
 ===========
