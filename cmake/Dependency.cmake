@@ -2,10 +2,6 @@ get_filename_component(_current_dir ${CMAKE_CURRENT_LIST_FILE} PATH)
 include(${_current_dir}/GlobalMap.cmake)
 global_set(current dir "${_current_dir}")
 
-macro(obtain _name)
-    find_package(${_name} ${ARGN})
-endmacro()
-
 macro(add_to_registry _module _path)
     global_set(module.path. ${_module} "${_path}")
 endmacro()
