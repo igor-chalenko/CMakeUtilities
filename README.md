@@ -80,7 +80,7 @@ Usage
 
 After the installation, the package becomes available to CMake via
 ```cmake
-find_package(cmake-utilities)
+find_package(CMakeUtilities)
 
 include(GlobalMap)
 include(Logging)
