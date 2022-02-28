@@ -18,7 +18,7 @@ Files
 
   Dynamically wraps a given list of functions into a new list where every
   function has an optional prologue/epilogue and calls the original function
-  with the possibly amended arguments. Uses
+  with possibly amended arguments. Uses
   [cmake_language](https://cmake.org/cmake/help/latest/command/cmake_language.html).
 
 * `GlobalMap.cmake`
@@ -80,7 +80,7 @@ Usage
 
 After the installation, the package becomes available to CMake via
 ```cmake
-find_package(cmake-utilities)
+find_package(CMakeUtilities)
 
 include(GlobalMap)
 include(Logging)
