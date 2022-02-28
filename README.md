@@ -88,8 +88,3 @@ include(Testing)
 ```
 
 There are a few examples in the `test` sub-directory.
-
-License
--------
-
-This package is under the MIT license. See the 
